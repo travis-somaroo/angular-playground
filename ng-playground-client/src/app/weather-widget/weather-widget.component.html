@@ -1,0 +1,10 @@
+<p-card header="Weather Forecast" subheader="Current weather in your location">
+  <div class="flex flex-column align-items-center">
+    <h1>{{ state.data.condition === 'sunny' ? '☀️' : '☁️' }}</h1>
+    <h3>{{ state.data.temperature }}°C</h3>
+  </div>
+  <div class="flex flex-row-reverse justify-content-center gap-2">
+    <p-button label="Reload" (onClick)="actions.reload()"/>
+    <p-button label="Copy Data" [outlined]="true" (onClick)="actions.copyData()"/>
+  </div>
+</p-card>
