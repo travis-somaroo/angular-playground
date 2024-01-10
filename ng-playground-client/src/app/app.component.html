@@ -1,3 +1,16 @@
 <div class="m-auto mt-5 w-3">
-  <app-weather-widget/>
+  <app-weather-widget [headerTemplate]="altWidgetHeader" [contentTemplate]="altWidgetContent"/>
 </div>
+
+<ng-template #altWidgetHeader>
+  <div class="p-card-title bg-blue-500">Today's Weather</div>
+</ng-template>
+
+<!--After equal we need to mention the key of the "state" we want to get a reference to-->
+<!--IF we use the $implicit key in the ngTemplateOutletContext then we does the key assignment for us mentioned on line 9-->
+<ng-template #altWidgetContent let-foo>
+  <div class="flex flex-column align-items-center">
+    <h1 class="text-blue-500">{{ foo.data.condition === 'sunny' ? '☀️' : '☁️' }}</h1>
+    <h3 class="text-blue-500">{{ foo.data.temperature }}°C</h3>
+  </div>
+</ng-template>
