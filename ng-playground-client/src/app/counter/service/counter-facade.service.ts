@@ -99,11 +99,7 @@ export class CounterFacadeService {
     );
 
   constructor() {
-    const init$ = merge(
-      this.updateCounterFromTick$,
-    );
-
-
+    const init$ = merge(this.updateCounterFromTick$);
     init$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
   }
 }
