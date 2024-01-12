@@ -1,11 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
-import { first, map, ReplaySubject, tap } from 'rxjs';
+import { first, map, ReplaySubject } from 'rxjs';
 import { CounterState } from '../../model/counter-state';
 import { ButtonModule } from 'primeng/button';
 import { ToArrayPipe } from '../../pipes/to-array.pipe';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { Event } from '@angular/router';
 
 @Component({
   selector: 'app-counter-view',
@@ -23,9 +22,7 @@ import { Event } from '@angular/router';
 })
 export class CounterViewComponent {
   private stateSubject = new ReplaySubject<CounterState>(1);
-  state$ = this.stateSubject.asObservable().pipe(
-    tap(state => console.log('foo', state))
-  );
+  state$ = this.stateSubject.asObservable();
 
   @Input()
   set state(c: CounterState) {
