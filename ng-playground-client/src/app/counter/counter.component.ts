@@ -1,32 +1,30 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { CounterFacadeService } from './service/counter-facade.service';
-import { CounterViewComponent } from './ui/counter-view.component';
+import { Component, inject } from '@angular/core';
+import { CounterViewComponent } from './counter-view/counter-view.component';
+import { CounterFacadeService } from '../service/counter-facade.service';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
-  standalone: true,
-  selector: 'app-counter',
-  template: `
-    <app-counter-view
-      [state]="counterFacade.counterState$ | async"
-      (btnStart)="counterFacade.btnStart.next($event)"
-      (btnPause)="counterFacade.btnPause.next($event)"
-      (btnSetTo)="counterFacade.btnSetTo.next($event)"
-      (inputSetTo)="counterFacade.inputSetTo.next($event)"
-      (btnUp)="counterFacade.btnUp.next($event)"
-      (btnDown)="counterFacade.btnDown.next($event)"
-      (inputTickSpeed)="counterFacade.inputTickSpeed.next($event)"
-      (inputCountDiff)="counterFacade.inputCountDiff.next($event)"
-      (btnReset)="counterFacade.btnReset.next($event)"
-    >
-    </app-counter-view>
-  `,
-  imports: [
-    CounterViewComponent,
-    AsyncPipe
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-counter',
+    standalone: true,
+    imports: [
+        CounterViewComponent,
+        AsyncPipe
+    ],
+    template: `
+        <app-counter-view
+                [state]="facade.counterState$ | async"
+                (btnStart)="facade.btnStart.next($event)"
+                (btnPause)="facade.btnPause.next($event)"
+                (btnSetTo)="facade.btnSetTo.next($event)"
+                (inputSetTo)="facade.inputSetTo.next($event)"
+                (btnUp)="facade.btnUp.next($event)"
+                (btnDown)="facade.btnDown.next($event)"
+                (inputTickSpeed)="facade.inputTickSpeed.next($event)"
+                (inputCountDiff)="facade.inputCountDiff.next($event)"
+                (btnReset)="facade.btnReset.next($event)"
+        />
+    `
 })
 export class CounterComponent {
-  protected counterFacade = inject(CounterFacadeService);
+    protected facade = inject(CounterFacadeService);
 }

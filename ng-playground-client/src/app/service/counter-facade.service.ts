@@ -1,11 +1,10 @@
 import { DestroyRef, inject, Injectable } from '@angular/core';
-import { CounterState, INITIAL_COUNTER_STATE } from '../../model/counter-state';
 import {
   combineLatest,
+  distinctUntilChanged,
   map,
   merge,
   NEVER,
-  Observable,
   scan,
   shareReplay,
   startWith,
@@ -15,9 +14,10 @@ import {
   timer,
   withLatestFrom
 } from 'rxjs';
-import { Command } from '../../model/command';
-import { inputToValue } from '../operators/input-to-value';
+import { Command } from '../model/command';
+import { CounterState, CounterStateKeys, INITIAL_COUNTER_STATE } from '../model/counter-state';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { inputToValue } from '../operators/input-to-value';
 
 @Injectable({
   providedIn: 'root'
@@ -25,11 +25,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class CounterFacadeService {
   private destroyRef = inject(DestroyRef);
 
-  initialCounterState = INITIAL_COUNTER_STATE;
+  initialCounterState: CounterState = INITIAL_COUNTER_STATE;
 
-  /**
-   * User interactions
-   */
+// Actions
   btnStart = new Subject<Event>();
   btnPause = new Subject<Event>();
   btnUp = new Subject<Event>();
@@ -40,44 +38,41 @@ export class CounterFacadeService {
   inputCountDiff = new Subject<Event>();
   btnReset = new Subject<Event>();
 
-
-  lastSetToFromButtonClick = this.btnSetTo
+  lastSetToFromButtonClick = this.btnSetTo.asObservable()
     .pipe(
       withLatestFrom(this.inputSetTo.pipe(inputToValue()), (btnSetTo, inputSetTo: number) => {
         return inputSetTo;
-      })
-    );
+      }));
 
-  /**
-   * State Observable - this is where we will query the state and update the timer.
-   */
-  programmaticCommandSubject = new Subject<Command>();
-
-  counterCommands$: Observable<Command | any> = merge(
+  private commandSubject = new Subject<Command>();
+  counterCommands$ = merge(
     this.btnStart.pipe(map(() => ({isTicking: true}))),
     this.btnPause.pipe(map(() => ({isTicking: false}))),
-    this.lastSetToFromButtonClick.pipe(map(n => ({count: n}))),
     this.btnUp.pipe(map(() => ({countUp: true}))),
     this.btnDown.pipe(map(() => ({countUp: false}))),
-    this.inputTickSpeed.pipe(inputToValue(), map(n => ({tickSpeed: n}))),
+    this.lastSetToFromButtonClick.pipe(map(n => ({count: n}))),
+    this.inputTickSpeed.pipe(inputToValue(), map(n => ({ tickSpeed: n }))),
     this.inputCountDiff.pipe(inputToValue(), map(n => ({countDiff: n}))),
     this.btnReset.pipe(map(() => ({...this.initialCounterState}))),
-    this.programmaticCommandSubject.asObservable()
+    this.commandSubject.asObservable()
   );
 
-  counterState$: Observable<CounterState> = this.counterCommands$
-    .pipe(
-      startWith(this.initialCounterState),
-      scan((counterState: CounterState, command): CounterState => ({...counterState, ...command})),
-      shareReplay(1)
-    );
+  counterState$ = this.counterCommands$.pipe(
+    startWith(this.initialCounterState),
+    scan((counterState: CounterState, command): CounterState => ({...counterState, ...command})),
+    tap(s => console.log('counter state', s)),
+    shareReplay(1)
+  );
 
+  isTicking$ = this.counterState$.pipe(
+    map((counterState: CounterState) => counterState[CounterStateKeys.isTicking]),
+    distinctUntilChanged<boolean>()
+  );
 
-  /**
-   * Side effects
-   */
-  isTicking$ = this.counterState$.pipe(map(state => state.isTicking));
-  tickSpeed$ = this.counterState$.pipe(map(state => state.tickSpeed));
+  tickSpeed$ = this.counterState$.pipe(
+    map((counterState: CounterState) => counterState[CounterStateKeys.tickSpeed]),
+    distinctUntilChanged<number>()
+  );
 
   intervalTick$ = combineLatest([this.isTicking$, this.tickSpeed$])
     .pipe(
@@ -86,20 +81,20 @@ export class CounterFacadeService {
       })
     );
 
-  /**
-   * Background effect thats updates the ticking counter based on the action
-   */
-  updateCounterFromTick$ = this.intervalTick$
+  updateCounterState$ = this.intervalTick$
     .pipe(
       withLatestFrom(this.counterState$, (_, s) => s),
       tap(({count, countDiff, countUp}) => {
         const diff = countDiff * (countUp ? 1 : -1);
-        this.programmaticCommandSubject.next({count: count + diff});
+        this.commandSubject.next({count: count + diff});
       })
     );
 
   constructor() {
-    const init$ = merge(this.updateCounterFromTick$);
-    init$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
+    merge(
+      this.updateCounterState$,
+    )
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe();
   }
 }

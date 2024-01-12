@@ -1,0 +1,36 @@
+<div>
+  <h1 class="text-center">Counter - RxJS Dynamic UI</h1>
+  <div class="flex align-items-center justify-content-center gap-3">
+    <ng-container *ngFor="let digit of (state$ | async).count | toArray">
+      <h1 class="text-2xl">{{ digit }}</h1>
+    </ng-container>
+  </div>
+
+  <div class="flex align-items-center justify-content-center flex-column gap-5">
+    <div class="flex gap-3">
+      <p-button (onClick)="btnStart.next($event)" label="Start"/>
+      <p-button (onClick)="btnPause.next($event)" label="Pause"/>
+    </div>
+
+    <div class="flex gap-3">
+      <p-button (onClick)="btnDown.next($event)" label="Count Down"/>
+      <p-button (onClick)="btnUp.next($event)" label="Count Up"/>
+    </div>
+
+    <div class="flex gap-3">
+      <p-button (onClick)="btnSetTo.next($event)" label="Set To"/>
+      <input class="p-component p-inputtext" (input)="inputSetTo.next($event)" [value]="initialSetToValue$ | async"/>
+    </div>
+
+    <div class="flex gap-3">
+      <label>Count Diff</label>
+      <input class="p-component p-inputtext" (input)="inputCountDiff.next($event)"
+             [value]="(state$ | async).countDiff"/>
+
+      <label>Tick Speed</label>
+      <input class="p-component p-inputtext" (input)="inputTickSpeed.next($event)"
+             [value]="(state$ | async).tickSpeed"/>
+      <p-button (onClick)="btnReset.next($event)" label="Reset"/>
+    </div>
+  </div>
+</div>
