@@ -6,11 +6,11 @@ import { map, Observable, tap } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class UserFacade {
+export class UserFacadePull {
   private http = inject(HttpClient);
 
   users: User[] = [];
-  criteria: string = 'ngDominican';
+  criteria: string = 'Joe';
   pagination: Pagination = {
     selectedSize: 5,
     currentPage: 0,

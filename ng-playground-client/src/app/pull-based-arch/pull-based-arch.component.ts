@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { ChipsModule } from 'primeng/chips';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { UserFacade } from './user-facade';
+import { UserFacadePull } from './user-facade-pull';
 import { User } from './user';
 import { debounceTime, distinctUntilChanged, Observable, tap } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
@@ -24,7 +24,7 @@ import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PullBasedArchComponent implements OnInit {
-  userFacade = inject(UserFacade);
+  userFacade = inject(UserFacadePull);
 
   showButton = true;
   pagination = this.userFacade.pagination;
