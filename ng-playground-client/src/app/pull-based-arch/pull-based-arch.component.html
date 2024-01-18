@@ -1,0 +1,42 @@
+<div>
+  <h1>Pull Based Arch</h1>
+  <div class="flex flex-column gap-3">
+    <div>
+      <label class="mr-2">Search for:</label>
+      <input pInputText [formControl]="searchTerm">
+    </div>
+    <div class="flex gap-2 align-items-center">
+      <label>Search page size:</label>
+      <p-button
+        *ngFor="let pageSize of pagination.pageSizes"
+        [ngClass]="{active: pageSize === pagination.selectedSize}"
+        (onClick)="updatePagination(pageSize)"
+        [label]="pageSize.toString()"
+      />
+    </div>
+
+    <ng-container *ngIf="(users$ | async) as users else noUsers">
+      <ul>
+        <li *ngFor="let user of users">
+          {{ user.name.first }} {{ user.name.last }}
+        </li>
+      </ul>
+    </ng-container>
+
+    <div class="flex gap-2">
+      <p-button (onClick)="loadUsers()" [label]="'Load Users'"/>
+      <p-button (onClick)="getPageSize()" [label]="'Show Page Size'"/>
+
+      <p *ngIf="!showButton" class="font-semibold">
+        Current PageSize = {{ pagination.selectedSize }}
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<ng-template #noUsers>
+  <span class="text-red-500">This is where you 'pull' data from the service.</span>
+  <br/>
+  <span class="text-red-500">Click the 'Load Users' button ▼ below!</span>
+</ng-template>
