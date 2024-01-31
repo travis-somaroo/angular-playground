@@ -1,0 +1,19 @@
+<div class="container mt-3">
+  <h2>NGX Translation Service</h2>
+  <form [formGroup]="newCustomerForm">
+    <div class="grid">
+      <div class="field flex flex-column col-4">
+        <label>First Name</label>
+        <input pInputText formControlName="firstName" appValidationFeedback [label]="'First Name'">
+      </div>
+      <div class="field flex flex-column col-4">
+        <label>Last Name</label>
+        <input pInputText formControlName="lastName" appValidationFeedback [label]="'Last Name'">
+      </div>
+      <div class="field flex flex-column col-4">
+        <label>Date of Birth</label>
+        <p-calendar formControlName="dob" [showIcon]="true" appValidationFeedback [label]="'Date of Birth'"/>
+      </div>
+    </div>
+  </form>
+</div>

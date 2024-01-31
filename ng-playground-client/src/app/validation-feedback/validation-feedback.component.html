@@ -1,0 +1,7 @@
+<ng-container *ngIf="formGroup.get(controlName).touched && formGroup.get(controlName).errors as errors">
+  <ng-container *ngFor="let err of errors | keyvalue">
+    <p class="text-red-500">
+      {{ validationKey(err.key) | translate:{value: label | titlecase, min: minValue} }}
+    </p>
+  </ng-container>
+</ng-container>

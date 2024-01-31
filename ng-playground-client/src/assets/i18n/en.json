@@ -1,0 +1,8 @@
+{
+  "lang": "en",
+  "errors": {
+    "required": "{{value}} is a required field.",
+    "email": "{{value}} is a not a valid email.",
+    "minlength": "{{value}} has a min length of {{min}}."
+  }
+}
