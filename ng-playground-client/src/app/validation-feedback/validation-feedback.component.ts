@@ -35,6 +35,4 @@ export class ValidationFeedbackComponent {
   public validationKey(key: string) {
     return `errors.${key}`;
   }
-
-  protected readonly min = min;
 }

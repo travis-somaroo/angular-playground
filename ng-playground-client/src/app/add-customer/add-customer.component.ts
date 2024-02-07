@@ -23,7 +23,7 @@ export class AddCustomerComponent {
 
   newCustomerForm = this.fb.group({
     firstName: [null, [Validators.required, Validators.email]],
-    lastName: ["So", [Validators.required, Validators.minLength(5)]],
+    lastName: [null, [Validators.required, Validators.minLength(5)]],
     dob: [null, [Validators.required]],
   });
 }
