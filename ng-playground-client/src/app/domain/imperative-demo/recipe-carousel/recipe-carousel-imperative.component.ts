@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgIf, NgTemplateOutlet } from '@angular/common';
-import { RecipePreviewComponent } from '../../shared/recipe-preview/recipe-preview.component';
 import { ButtonModule } from 'primeng/button';
 import { ReplaySubject, takeUntil } from 'rxjs';
-import { Recipe } from '../../model/recipe';
-import { RecipeRepository } from '../../data-access/recipe-repository.service';
+import { RecipePreviewComponent } from '../../../shared/recipe-preview/recipe-preview.component';
+import { Recipe } from '../../../model/recipe';
+import { RecipeRepository } from '../../../data-access/recipe-repository.service';
 
 @Component({
   selector: 'app-recipe-imperative-carousel',
