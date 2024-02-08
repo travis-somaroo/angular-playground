@@ -1,0 +1,20 @@
+<div>
+  <!-- Top navigation buttons. -->
+  <ng-container *ngTemplateOutlet="navigation"></ng-container>
+
+  <div class="flex justify-content-center">
+    <app-recipe-preview *ngIf="getRecipe() as recipe" [recipe]="recipe"/>
+  </div>
+
+  <!-- Bottom navigation buttons. -->
+  <ng-container *ngTemplateOutlet="navigation"></ng-container>
+
+  <!-- Navigation actions template. -->
+  <ng-template #navigation>
+    <div *ngIf="recipes" class="flex justify-content-center gap-3">
+      <p-button label="RESET" (onClick)="onReset()" severity="warning"/>
+      <p-button label="PREVIOUS" [disabled]="!hasPrevious()" (onClick)="onPrevious()" severity="secondary"/>
+      <p-button label="NEXT" [disabled]="!hasNext()" (onClick)="onNext()" severity="info"/>
+    </div>
+  </ng-template>
+</div>
