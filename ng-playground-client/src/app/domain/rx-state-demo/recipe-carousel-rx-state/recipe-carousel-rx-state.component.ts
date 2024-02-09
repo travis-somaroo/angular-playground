@@ -7,6 +7,7 @@ import { Recipe } from '../../../model/recipe';
 import { RecipeRepository } from '../../../data-access/recipe-repository.service';
 import { map, timer } from 'rxjs';
 import { select, selectSlice } from '@rx-angular/state/selections';
+import { autoIncrementWhenIdle } from '../../../function/auto-increment';
 
 interface State {
   recipeIndex: number;
@@ -70,6 +71,15 @@ export class RecipeCarouselRxStateComponent {
     this.state.connect('recipes', this.recipeRepository.getRecipes$());
     // Since hasNext$ and recipe$ is observing the whole state they will emit everytime the state changes.
     this.state.connect('index', timer(0, 500));
+    autoIncrementWhenIdle(this.state, {
+      property: 'recipeIndex',
+      interval: 3000
+    });
+    // this.state.connect(
+    //   'recipeIndex',
+    //   this.recipeIndex$.pipe(switchMap(v => of(v).pipe(delay(3000)))),
+    //   (state) => state.recipeIndex + 1
+    // );
   }
 
 
