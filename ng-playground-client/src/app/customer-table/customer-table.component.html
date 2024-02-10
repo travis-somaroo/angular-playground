@@ -1,0 +1,29 @@
+<div class="grid">
+  <div class="col-10 col-offset-1">
+    <p-table
+      [rows]="5"
+      [lazy]="true"
+      [paginator]="true"
+      [value]="customerRepository.customers$ | async"
+      [totalRecords]="customerRepository.totalRecords$ | async"
+      [showCurrentPageReport]="true"
+      [rowsPerPageOptions]="[5, 10, 20]"
+      (onLazyLoad)="loadCustomers($event)"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>First Name</th>
+          <th>Last Name</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-customer>
+        <tr>
+          <td>{{ customer.firstName }}</td>
+          <td>{{ customer.lastName }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
