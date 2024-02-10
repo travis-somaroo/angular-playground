@@ -21,7 +21,6 @@ export class CustomerRepository {
     this.size$
   ]).pipe(
     switchMap(([page, size]) => this.fetchAllCustomers$(page, size).pipe(
-      tap(console.log),
       tap((res: any) => this.setTotalRecords(res.totalElements)),
       map((res: any) => res.content as Customer[])
     ))
