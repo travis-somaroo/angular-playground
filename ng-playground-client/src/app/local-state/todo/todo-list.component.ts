@@ -11,7 +11,7 @@ interface TodosState {
 }
 
 @Component({
-  selector: 'app-todo-state',
+  selector: 'app-todo-list',
   standalone: true,
   imports: [
     AsyncPipe,
@@ -20,10 +20,10 @@ interface TodosState {
     NgForOf,
     ButtonModule
   ],
-  templateUrl: './todo.component.html',
+  templateUrl: './todo-list.component.html',
   providers: [RxState]
 })
-export class TodoComponent {
+export class TodoListComponent {
   private state: RxState<TodosState> = inject(RxState);
 
   readonly tasks$ = this.state.select('tasks');

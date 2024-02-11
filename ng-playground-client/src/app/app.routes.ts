@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import { TodoComponent } from './local-state/todo/todo.component';
+import { TodoListComponent } from './local-state/todo/todo-list.component';
 
 export const routes: Routes = [
   {
     path: 'local',
-    component: TodoComponent
+    component: TodoListComponent
   },
   {
     path: '',
