@@ -1,0 +1,13 @@
+<div>
+  <h4>Tasks left to do: {{ counter$ | async }}</h4>
+  <p-button (onClick)="toggleExpand()" label="Toggle Expand/Collapse"/>
+  @if (isExpanded$ | async) {
+    @for (task of tasks$ |async; track task) {
+      <div class="col-6 col-offset-3 border-1 border-gray-200 p-3">
+        <p>{{ task.todo }}</p>
+        <small class="font-italic">Completed: {{ task.completed }}</small>
+      </div>
+    }
+  }
+</div>
+
