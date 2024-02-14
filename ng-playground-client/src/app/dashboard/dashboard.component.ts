@@ -58,7 +58,10 @@ export class DashboardComponent {
       ],
       chart: {
         type: "bar",
-        height: 350
+        height: 350,
+        toolbar: {
+          show: false
+        },
       },
       plotOptions: {
         bar: {
@@ -109,6 +112,9 @@ export class DashboardComponent {
       chart: {
         type: "area",
         height: 350,
+        toolbar: {
+          show: false
+        },
         zoom: {
           enabled: false
         },
