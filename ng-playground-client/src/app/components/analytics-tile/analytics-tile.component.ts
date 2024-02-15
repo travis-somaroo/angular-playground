@@ -1,12 +1,14 @@
 import { Component, input, ViewChild } from '@angular/core';
 import { ChartOptions, ChartType } from './analytics-tile';
 import { ChartComponent, NgApexchartsModule } from 'ng-apexcharts';
+import { TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-analytics-tile',
   standalone: true,
   imports: [
-    NgApexchartsModule
+    NgApexchartsModule,
+    TitleCasePipe
   ],
   templateUrl: './analytics-tile.component.html',
   styleUrl: './analytics-tile.component.scss'
@@ -27,28 +29,20 @@ export class AnalyticsTileComponent {
         },
       ],
       chart: {
-        type: 'bar',
-        height: 200,
+        type: 'area',
+        height: 100,
         toolbar: {
           show: false
         },
       },
       colors: [
-        "#026591",
         "#03a8f2",
-        "#b2e3fa",
-        "#e5f6fe",
-        "#c4cacd",
       ],
       plotOptions: {
         bar: {
           distributed: true,
           horizontal: true
         },
-      },
-      stroke: {
-        width: 0.75,
-        colors: ["#fff"]
       },
       dataLabels: {
         enabled: false,
@@ -60,8 +54,8 @@ export class AnalyticsTileComponent {
       },
       xaxis: {
         labels: {
-          show: true,
-          formatter: function(val) {
+          show: false,
+          formatter: function (val) {
             return Math.abs(Math.round(parseInt(val, 10))) + "%";
           }
         },
@@ -78,9 +72,6 @@ export class AnalyticsTileComponent {
             show: false
           }
         }
-      },
-      legend: {
-        show: false
       },
       tooltip: {
         theme: "dark",
