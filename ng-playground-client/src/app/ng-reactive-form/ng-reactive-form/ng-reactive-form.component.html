@@ -1,0 +1,27 @@
+<div class="grid">
+  <div class="col-6">
+    <form [formGroup]="form">
+      <div class="field">
+        <label>
+          <span>Gender</span>
+        </label>
+        <div class="flex gap-2">
+          <p-radioButton name="gender" label="Male" value="male" formControlName="gender"/>
+          <p-radioButton name="gender" label="Female" value="female" formControlName="gender"/>
+          <p-radioButton name="gender" label="Other" value="other" formControlName="gender"/>
+        </div>
+      </div>
+      <div class="field" *ngIf="isOtherGender">
+        <label>
+          <span>Other Gender</span>
+        </label>
+        <div>
+          <input pInputText formControlName="otherGender">
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="col-6">
+    <pre> {{ form.value | json }}</pre>
+  </div>
+</div>
