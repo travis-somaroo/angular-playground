@@ -1,0 +1,47 @@
+<h3>Address</h3>
+<div class="flex flex-column gap-3">
+  <div class="field">
+    <label>
+      <span>Street</span>
+      <div>
+        <input pInputText [ngModel]="address?.street" name="street"/>
+      </div>
+    </label>
+  </div>
+
+  <div class="field">
+    <label>
+      <span>City</span>
+      <div>
+        <input pInputText [ngModel]="address?.city" name="city"/>
+      </div>
+    </label>
+  </div>
+
+  <div class="field">
+    <label>
+      <span>Zipcode</span>
+      <div>
+        <input pInputText [ngModel]="address?.zipcode" name="zipcode"/>
+      </div>
+    </label>
+  </div>
+
+  <div class="field">
+    <label>
+      <span>Number</span>
+      <div>
+        <input pInputText [ngModel]="address?.number" name="number"/>
+      </div>
+    </label>
+  </div>
+
+  <div class="field">
+    <label>
+      <span>Country</span>
+      <div>
+        <input pInputText [ngModel]="address?.country" name="country"/>
+      </div>
+    </label>
+  </div>
+</div>

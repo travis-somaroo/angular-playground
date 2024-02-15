@@ -1,0 +1,102 @@
+<div class="grid">
+  <div class="col-6">
+    <h1>Simple Template Driven Form</h1>
+    <form (formValueChange)="formValue.set($event)">
+      <div class="flex flex-column gap-3">
+        <div class="field">
+          <label>
+            <span>First Name</span>
+          </label>
+          <div>
+            <input pInputText name="firstName" [ngModel]="vm.formValue.firstName"/>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>
+            <span>Last Name</span>
+          </label>
+          <div>
+            <input pInputText name="lastName" [ngModel]="vm.formValue.lastName"/>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>
+            <span>Age</span>
+          </label>
+          <div>
+            <input pInputText name="age" [ngModel]="vm.formValue.age"/>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>
+            <span>Emergency Contact</span>
+          </label>
+          <div>
+            <input
+              pInputText
+              name="emergencyContactNumber"
+              [disabled]="vm.emergencyContactDisabled"
+              [ngModel]="vm.formValue.emergencyContactNumber"
+            />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>
+            <span>Gender</span>
+          </label>
+          <div class="flex gap-2">
+            <p-radioButton name="gender" label="Male" value="male" [ngModel]="vm.formValue.gender"/>
+            <p-radioButton name="gender" label="Female" value="female" [ngModel]="vm.formValue.gender"/>
+            <p-radioButton name="gender" label="Other" value="other" [ngModel]="vm.formValue.gender"/>
+          </div>
+        </div>
+
+        <div>
+          <label>
+            <input
+              *ngIf="vm.showOtherGender"
+              pInputText
+              [ngModel]="vm.formValue.genderOther"
+              name="genderOther"
+            />
+          </label>
+        </div>
+        <div ngModelGroup="addresses">
+          <div ngModelGroup="billingAddress">
+            <h2>Billing address</h2>
+            <app-address-form [address]="vm.formValue.addresses?.billingAddress"/>
+          </div>
+
+          <div class="field">
+            <label>
+              <span>Shipping address is different from billing address</span>
+            </label>
+            <div>
+              <p-checkbox
+                [binary]="true"
+                name="shippingAddressDifferentFromBillingAddress"
+                [ngModel]="vm.formValue.addresses?.shippingAddressDifferentFromBillingAddress"
+              />
+            </div>
+          </div>
+
+          <div *ngIf="vm.showShippingAddress" ngModelGroup="shippingAddress">
+            <h2>Shipping address</h2>
+            <app-address-form [address]="vm.formValue.addresses?.shippingAddress"/>
+          </div>
+        </div>
+
+        <div>
+          <p-button type="submit" label="Submit" (onClick)="submitHandler()"/>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="col-6">
+    <pre>{{ vm.formValue | json }}</pre>
+  </div>
+</div>
