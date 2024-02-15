@@ -66,4 +66,9 @@ export class MyFormComponent {
   submitHandler() {
     console.log(this.formValue());
   }
+
+  onSetForm(event: any) {
+    console.log(event);
+    this.formValue.set(event);
+  }
 }

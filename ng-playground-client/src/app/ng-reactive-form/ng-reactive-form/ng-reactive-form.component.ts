@@ -21,9 +21,11 @@ export class NgReactiveFormComponent {
 
   form = this.fb.group({
     gender: [],
-    otherGender: []
+    otherGender: [],
+    address: this.fb.group({
+      street: []
+    })
   });
-
 
   get isOtherGender() {
     return this.form.controls.gender.value === 'other';

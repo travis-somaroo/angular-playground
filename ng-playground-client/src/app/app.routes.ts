@@ -4,16 +4,16 @@ import { NgReactiveFormComponent } from './ng-reactive-form/ng-reactive-form/ng-
 
 export const routes: Routes = [
   {
-    path: 'signal-reactive-forms',
+    path: 'signal',
     component: MyFormComponent
   },
   {
-    path: 'ng-reactive-forms',
+    path: 'reactive',
     component: NgReactiveFormComponent
   },
   {
     path: '',
-    redirectTo: 'ng-reactive-forms',
+    redirectTo: 'reactive',
     pathMatch: 'full'
   }
 ];
