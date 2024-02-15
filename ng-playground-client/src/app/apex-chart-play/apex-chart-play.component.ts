@@ -32,12 +32,12 @@ export type ChartOptions = {
 };
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-apex-chart-play',
   standalone: true,
   imports: [NgApexchartsModule],
-  templateUrl: './dashboard.component.html',
+  templateUrl: './apex-chart-play.component.html',
 })
-export class DashboardComponent {
+export class ApexChartPlayComponent {
   @ViewChild(ChartComponent) chart: ChartComponent;
   public sideBarChartOptions: Partial<ChartOptions>;
 

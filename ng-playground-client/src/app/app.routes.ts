@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { ApexChartPlayComponent } from './apex-chart-play/apex-chart-play.component';
 
 export const routes: Routes = [
   {
     path: '',
-    component: DashboardComponent
+    component: ApexChartPlayComponent
   }
 ];
