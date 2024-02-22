@@ -1,0 +1,29 @@
+<form [formGroup]="formGroup" class="grid">
+  <ng-container *ngFor="let control of formSchema.propertyRules">
+    <div class="col-4">
+      <div class="sbv-label">
+        <label [innerText]="control.displayName"></label>
+      </div>
+      <input
+        *ngIf="control.type.includes('text')"
+        [formControlName]="control.propertyName"
+        [value]="control.defaultValue"
+        class="form-control"
+        pInputText
+      />
+      <p-inputNumber
+        *ngIf="control.type.includes('number')"
+        [formControlName]="control.propertyName"
+        inputStyleClass="form-control"
+      />
+      <p-calendar
+        *ngIf="control.type.includes('date')"
+        [formControlName]="control.propertyName"
+        [showIcon]="true"
+        dateFormat="dd/mm/yy"
+        styleClass="form-control"
+      />
+    </div>
+  </ng-container>
+</form>
+

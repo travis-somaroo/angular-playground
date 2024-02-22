@@ -1,0 +1,46 @@
+<div class="p-5">
+  <div class="grid">
+    <div class="col-4">
+      <label>Deposit Rule</label>
+      <div>
+        <p-dropdown
+          styleClass="form-control"
+          optionValue="name"
+          optionLabel="name"
+          [options]="depositRuleOptions"
+          [formControl]="depositRuleCtrl"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="flex gap-2 justify-content-end">
+    <p-button
+      *ngIf="numInnerBags$.getValue() > 1"
+      icon="pi pi-minus"
+      label="Inner Bag"
+      (onClick)="onRemoveInnerBag()"
+      [disabled]="numInnerBags$.getValue() <= 1"
+    />
+    <p-button
+      *ngIf="(schema$ | async)?.maximumInnerBags > 1"
+      icon="pi pi-plus"
+      label="Inner Bag"
+      (onClick)="onAddInnerBag()"
+      [disabled]="(numInnerBags$.getValue() >= (schema$ | async)?.maximumInnerBags )"
+    />
+  </div>
+
+  <p-tabView [(activeIndex)]="activeTabIndex" *ngIf="schema$ | async">
+    <ng-container *ngFor="let schema of innerBagSchemas$ | async; let i = index">
+      <p-tabPanel [header]="label(i)">
+        <ng-template pTemplate="header">
+          <i class="pi pi-shopping-bag mr-3"></i>
+          <span>Inner Bag {{ i + 1 }}</span>
+        </ng-template>
+
+        <app-json-form *ngIf="schema && schema.formData" [schema]="schema.formData" #innerBagFormCmp/>
+      </p-tabPanel>
+    </ng-container>
+  </p-tabView>
+</div>

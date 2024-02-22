@@ -1,0 +1,108 @@
+{
+  "id": 2,
+  "name": "SBSA Cash Upload",
+  "code": "SBSA_CASH_UPLOAD",
+  "deleted": false,
+  "maximumInnerBags": 3,
+  "aggregated": false,
+  "propertyRules": [
+    {
+      "propertyName": "bagID",
+      "displayName": "Outer Bag ID",
+      "defaultValue": "",
+      "type": "text",
+      "validators": {
+        "required": true,
+        "min": null
+      }
+    }
+  ],
+  "innerBagRule": {
+    "id": 2,
+    "name": "SBSA Cash Upload",
+    "code": "SBSA_CASH_UPLOAD",
+    "deleted": false,
+    "propertyRules": [
+      {
+        "propertyName": "envelopeID",
+        "displayName": "Envelope ID",
+        "defaultValue": "",
+        "type": "text",
+        "validators": {
+          "required": true,
+          "min": null
+        }
+      },
+      {
+        "propertyName": "depositID1",
+        "displayName": "Store Number",
+        "defaultValue": "",
+        "type": "text",
+        "validators": {
+          "required": true,
+          "min": null
+        }
+      },
+      {
+        "propertyName": "depositID7",
+        "displayName": "Store Name",
+        "defaultValue": "",
+        "type": "text",
+        "validators": {
+          "required": true,
+          "min": null
+        }
+      },
+      {
+        "propertyName": "depositID2",
+        "displayName": "Account Number",
+        "defaultValue": "",
+        "type": "text",
+        "validators": {
+          "required": true,
+          "min": null
+        }
+      },
+      {
+        "propertyName": "depositID3",
+        "displayName": "Account Name",
+        "defaultValue": "",
+        "type": "text",
+        "validators": {
+          "required": true,
+          "min": null
+        }
+      },
+      {
+        "propertyName": "depositID4",
+        "displayName": "Deposit Ref 1",
+        "defaultValue": "",
+        "type": "text",
+        "validators": {
+          "required": true,
+          "min": null
+        }
+      },
+      {
+        "propertyName": "depositID5",
+        "displayName": "Deposit Ref 2",
+        "defaultValue": "",
+        "type": "text",
+        "validators": {
+          "required": true,
+          "min": null
+        }
+      },
+      {
+        "propertyName": "amount",
+        "displayName": "Amount",
+        "defaultValue": "",
+        "type": "number",
+        "validators": {
+          "required": true,
+          "min": null
+        }
+      }
+    ]
+  }
+}
