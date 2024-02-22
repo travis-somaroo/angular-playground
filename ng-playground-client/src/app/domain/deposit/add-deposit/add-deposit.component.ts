@@ -1,6 +1,6 @@
 import { Component, inject, QueryList, ViewChildren } from '@angular/core';
 import { JsonFormComponent } from '../../../shared/json-form/json-form.component';
-import { BehaviorSubject, combineLatest, filter, map } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, map, scan } from 'rxjs';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { JsonFormSchema } from '../../../shared/json-form/json-form.model';
 import { DropdownModule } from 'primeng/dropdown';
@@ -45,14 +45,20 @@ export class AddDepositComponent {
     this.numInnerBags$.asObservable()
   ]).pipe(
     filter(([nestedSchema]) => !!nestedSchema.propertyRules),
-    map(([nestedSchema, numBags]) => {
-      const schemas = [];
+    scan((acc, [nestedSchema, numBags]) => {
+      let schemas = [...acc];
+
       for (let i = schemas.length; i < numBags; i++) {
-        const modifiedFormData = {...nestedSchema};
-        schemas.push({formData: modifiedFormData});
+        const modifiedFormData = { ...nestedSchema };
+        schemas.push({ formData: modifiedFormData });
       }
+
+      if (schemas.length > numBags) {
+        schemas = schemas.slice(0, numBags);
+      }
+
       return schemas;
-    }),
+    }, []),
   );
 
   protected onAddInnerBag(): void {

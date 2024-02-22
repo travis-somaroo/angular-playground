@@ -22,13 +22,13 @@ import { InputNumberModule } from 'primeng/inputnumber';
 })
 export class JsonFormComponent implements OnInit {
   @Input()
-  set schema(s: JsonFormSchema) {
+  set schema(s: Partial<JsonFormSchema>) {
     this.formSchema = s;
   }
 
   private fb = inject(FormBuilder);
 
-  formSchema!: JsonFormSchema;
+  formSchema!: Partial<JsonFormSchema>;
   formGroup!: FormGroup;
 
   ngOnInit() {
