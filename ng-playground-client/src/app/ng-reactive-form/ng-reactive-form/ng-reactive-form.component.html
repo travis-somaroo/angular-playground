@@ -19,15 +19,8 @@
           <input pInputText formControlName="otherGender">
         </div>
       </div>
-      <div class="field">
-        <label>
-          <span>Other Gender</span>
-        </label>
-        <div>
-          <input pInputText formControlName="street">
-        </div>
-      </div>
     </form>
+    <p-button [disabled]="form.invalid" label="Submit" (onClick)="submitHandler()"/>
   </div>
   <div class="col-6">
     <pre> {{ form.value | json }}</pre>

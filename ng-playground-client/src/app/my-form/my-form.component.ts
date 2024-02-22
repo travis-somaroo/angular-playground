@@ -68,7 +68,6 @@ export class MyFormComponent {
   }
 
   onSetForm(event: any) {
-    console.log(event);
     this.formValue.set(event);
   }
 }
