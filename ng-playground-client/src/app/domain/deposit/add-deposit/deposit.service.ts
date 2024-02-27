@@ -6,6 +6,9 @@ import { JsonFormSchema } from '../../../shared/json-form/json-form.model';
   providedIn: 'root'
 })
 export class DepositService {
+  private innerBagSchemas = new BehaviorSubject<any[]>([]);
+  innerBagSchemas$ = this.innerBagSchemas.asObservable();
+
   private depositSelectedSubject = new BehaviorSubject<JsonFormSchema>(undefined!);
   depositSelected$ = this.depositSelectedSubject.asObservable();
 
@@ -142,7 +145,22 @@ export class DepositService {
     },
   ];
 
+  get innerBagSize() {
+    return this.innerBagSchemas.getValue().length;
+  }
+
   setSelectedDeposit(deposit: JsonFormSchema) {
     this.depositSelectedSubject.next(deposit);
+  }
+
+  addInnerBagSchema(schema: any) {
+    const currentSchemas = this.innerBagSchemas.value;
+    this.innerBagSchemas.next([...currentSchemas, schema]);
+  }
+
+  removeInnerBagSchema() {
+    const currentSchemas = this.innerBagSchemas.value;
+    currentSchemas.pop();
+    this.innerBagSchemas.next([...currentSchemas]);
   }
 }

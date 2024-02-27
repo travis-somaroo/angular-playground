@@ -1,6 +1,6 @@
 import { Component, inject, QueryList, ViewChildren } from '@angular/core';
 import { JsonFormComponent } from '../../../shared/json-form/json-form.component';
-import { BehaviorSubject, combineLatest, filter, map, Observable, scan, shareReplay, tap } from 'rxjs';
+import { filter, map, Observable, shareReplay } from 'rxjs';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { JsonFormSchema } from '../../../shared/json-form/json-form.model';
 import { DropdownChangeEvent, DropdownModule } from 'primeng/dropdown';
@@ -8,6 +8,7 @@ import { TabViewModule } from 'primeng/tabview';
 import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { DepositService } from './deposit.service';
 import { ButtonModule } from 'primeng/button';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-add-deposit',
@@ -30,52 +31,26 @@ export class AddDepositComponent {
   @ViewChildren('innerBagFormCmp') innerBagsFormCmp!: QueryList<JsonFormComponent>;
 
   activeTabIndex = 0;
-
-  numInnerBags$ = new BehaviorSubject<number>(1);
   depositRuleCtrl = new FormControl<any>(undefined!, []);
 
-  schema$:Observable<JsonFormSchema> = this.depositService.depositSelected$.pipe(
+  schema$: Observable<JsonFormSchema> = this.depositService.depositSelected$.pipe(
     filter(s => !!s),
-    tap(s => console.log('schema', s)),
     shareReplay(1)
   );
 
-  innerBagSchemas$ = combineLatest([
-    this.schema$.pipe(map((data: JsonFormSchema) => data.innerBagRule)),
-    this.numInnerBags$.asObservable()
-  ]).pipe(
-    tap(s => console.log('inner schema', s)),
-    filter(([nestedSchema]) => !!nestedSchema.propertyRules),
-    scan((acc, [nestedSchema, numBags]) => {
-      let schemas = [...acc];
-
-      for (let i = schemas.length; i < numBags; i++) {
-        const modifiedFormData = {...nestedSchema};
-        schemas.push({formData: modifiedFormData});
-      }
-
-      if (schemas.length > numBags) {
-        schemas = schemas.slice(0, numBags);
-      }
-
-      return schemas;
-    }, []),
-    shareReplay(1)
-  );
+  private newSchema = toSignal(this.schema$.pipe(map(s => s.innerBagRule)));
 
   onDepositSelected(event: DropdownChangeEvent) {
     this.depositService.setSelectedDeposit(event.value);
   }
 
   protected onAddInnerBag(): void {
-    const currentNum = this.numInnerBags$.getValue();
-    this.numInnerBags$.next(currentNum + 1);
+    this.depositService.addInnerBagSchema(this.newSchema());
   }
 
   protected onRemoveInnerBag(): void {
-    const currentNum = this.numInnerBags$.getValue();
-    if (currentNum > 1) {
-      this.numInnerBags$.next(currentNum - 1);
+    if (this.depositService.innerBagSize > 1) {
+      this.depositService.removeInnerBagSchema();
       this.switchToPreviousTab();
     }
   }

@@ -23,6 +23,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 export class JsonFormComponent implements OnInit {
   @Input()
   set schema(s: Partial<JsonFormSchema>) {
+    console.log('schema in json form comp', s);
     this.formSchema = s;
   }
 
