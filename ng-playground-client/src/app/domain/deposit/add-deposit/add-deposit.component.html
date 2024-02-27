@@ -5,10 +5,10 @@
       <div>
         <p-dropdown
           styleClass="form-control"
-          optionValue="name"
           optionLabel="name"
-          [options]="depositRuleOptions"
+          [options]="depositService.depositTypes"
           [formControl]="depositRuleCtrl"
+          (onChange)="onDepositSelected($event)"
         />
       </div>
     </div>

@@ -16,8 +16,9 @@ export interface JsonFormSchema {
   id: number;
   name: string;
   code: string;
-  deleted?: boolean;
-  maximumInnerBags?: number;
+  deleted: boolean;
+  maximumInnerBags: number;
+  aggregated: boolean;
   propertyRules: JsonFormControls[];
   innerBagRule: JsonFormSchema;
 }

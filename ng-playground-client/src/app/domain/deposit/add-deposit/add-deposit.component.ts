@@ -1,9 +1,9 @@
 import { Component, inject, QueryList, ViewChildren } from '@angular/core';
 import { JsonFormComponent } from '../../../shared/json-form/json-form.component';
-import { BehaviorSubject, combineLatest, filter, map, scan } from 'rxjs';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { BehaviorSubject, combineLatest, filter, map, Observable, scan, shareReplay, tap } from 'rxjs';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { JsonFormSchema } from '../../../shared/json-form/json-form.model';
-import { DropdownModule } from 'primeng/dropdown';
+import { DropdownChangeEvent, DropdownModule } from 'primeng/dropdown';
 import { TabViewModule } from 'primeng/tabview';
 import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { DepositService } from './deposit.service';
@@ -25,32 +25,33 @@ import { ButtonModule } from 'primeng/button';
   templateUrl: './add-deposit.component.html',
 })
 export class AddDepositComponent {
-  private depositService = inject(DepositService);
+  protected depositService = inject(DepositService);
 
   @ViewChildren('innerBagFormCmp') innerBagsFormCmp!: QueryList<JsonFormComponent>;
 
   activeTabIndex = 0;
-  depositRuleOptions = [
-    {id: 1, name: 'Deposit Rule 1'},
-    {id: 2, name: 'Deposit Rule 2'}
-  ];
 
   numInnerBags$ = new BehaviorSubject<number>(1);
-  depositRuleCtrl = new FormControl<Partial<JsonFormSchema>>(undefined!, []);
+  depositRuleCtrl = new FormControl<any>(undefined!, []);
 
-  schema$ = this.depositService.getSchema$();
+  schema$:Observable<JsonFormSchema> = this.depositService.depositSelected$.pipe(
+    filter(s => !!s),
+    tap(s => console.log('schema', s)),
+    shareReplay(1)
+  );
 
   innerBagSchemas$ = combineLatest([
     this.schema$.pipe(map((data: JsonFormSchema) => data.innerBagRule)),
     this.numInnerBags$.asObservable()
   ]).pipe(
+    tap(s => console.log('inner schema', s)),
     filter(([nestedSchema]) => !!nestedSchema.propertyRules),
     scan((acc, [nestedSchema, numBags]) => {
       let schemas = [...acc];
 
       for (let i = schemas.length; i < numBags; i++) {
-        const modifiedFormData = { ...nestedSchema };
-        schemas.push({ formData: modifiedFormData });
+        const modifiedFormData = {...nestedSchema};
+        schemas.push({formData: modifiedFormData});
       }
 
       if (schemas.length > numBags) {
@@ -59,7 +60,12 @@ export class AddDepositComponent {
 
       return schemas;
     }, []),
+    shareReplay(1)
   );
+
+  onDepositSelected(event: DropdownChangeEvent) {
+    this.depositService.setSelectedDeposit(event.value);
+  }
 
   protected onAddInnerBag(): void {
     const currentNum = this.numInnerBags$.getValue();
@@ -83,4 +89,5 @@ export class AddDepositComponent {
       this.activeTabIndex -= 1;
     }
   }
+
 }
