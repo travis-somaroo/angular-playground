@@ -27,7 +27,7 @@
     />
   </div>
 
-  <p-tabView [(activeIndex)]="activeTabIndex" *ngIf="schema$ | async">
+  <p-tabView [(activeIndex)]="activeTabIndex" *ngIf="depositService.schema$ | async">
     <ng-container *ngFor="let schema of depositService.innerBagSchemas$ | async; let i = index">
       <p-tabPanel [header]="label(i)">
         <ng-template pTemplate="header">

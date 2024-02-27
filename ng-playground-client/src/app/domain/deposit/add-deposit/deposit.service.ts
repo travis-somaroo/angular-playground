@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, filter, map, Observable, shareReplay } from 'rxjs';
 import { JsonFormSchema } from '../../../shared/json-form/json-form.model';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,13 @@ export class DepositService {
 
   private depositSelectedSubject = new BehaviorSubject<JsonFormSchema>(undefined!);
   depositSelected$ = this.depositSelectedSubject.asObservable();
+
+  schema$: Observable<JsonFormSchema> = this.depositSelected$.pipe(
+    filter(s => !!s),
+    shareReplay(1)
+  );
+
+  private newSchema = toSignal(this.schema$.pipe(map(s => s.innerBagRule)));
 
   readonly depositTypes: any[] = [
     {
@@ -153,9 +161,9 @@ export class DepositService {
     this.depositSelectedSubject.next(deposit);
   }
 
-  addInnerBagSchema(schema: any) {
+  addInnerBagSchema() {
     const currentSchemas = this.innerBagSchemas.value;
-    this.innerBagSchemas.next([...currentSchemas, schema]);
+    this.innerBagSchemas.next([...currentSchemas, this.newSchema()]);
   }
 
   removeInnerBagSchema() {

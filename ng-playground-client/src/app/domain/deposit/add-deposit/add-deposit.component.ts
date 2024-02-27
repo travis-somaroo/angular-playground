@@ -33,19 +33,12 @@ export class AddDepositComponent {
   activeTabIndex = 0;
   depositRuleCtrl = new FormControl<any>(undefined!, []);
 
-  schema$: Observable<JsonFormSchema> = this.depositService.depositSelected$.pipe(
-    filter(s => !!s),
-    shareReplay(1)
-  );
-
-  private newSchema = toSignal(this.schema$.pipe(map(s => s.innerBagRule)));
-
   onDepositSelected(event: DropdownChangeEvent) {
     this.depositService.setSelectedDeposit(event.value);
   }
 
   protected onAddInnerBag(): void {
-    this.depositService.addInnerBagSchema(this.newSchema());
+    this.depositService.addInnerBagSchema();
   }
 
   protected onRemoveInnerBag(): void {
