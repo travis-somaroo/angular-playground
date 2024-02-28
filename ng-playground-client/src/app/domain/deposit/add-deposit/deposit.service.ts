@@ -7,7 +7,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
   providedIn: 'root'
 })
 export class DepositService {
-  private innerBagSchemas = new BehaviorSubject<any[]>([]);
+  private innerBagSchemas = new BehaviorSubject<JsonFormSchema[]>([]);
   innerBagSchemas$ = this.innerBagSchemas.asObservable();
 
   private depositSelectedSubject = new BehaviorSubject<JsonFormSchema>(undefined!);
@@ -37,7 +37,7 @@ export class DepositService {
           validators: {
             required: true,
             min: null,
-            max: 0
+            max: 10000
           },
         },
       ],
@@ -55,7 +55,7 @@ export class DepositService {
             validators: {
               required: true,
               min: null,
-              max: 0
+              max: 10000
             },
           },
           {
@@ -66,7 +66,7 @@ export class DepositService {
             validators: {
               required: true,
               min: null,
-              max: 0
+              max: 10000
             },
           },
           {
@@ -77,7 +77,7 @@ export class DepositService {
             validators: {
               required: true,
               min: null,
-              max: 0
+              max: 10000
             },
           },
           {
@@ -88,7 +88,7 @@ export class DepositService {
             validators: {
               required: true,
               min: null,
-              max: 0
+              max: 10000
             },
           },
         ],
@@ -113,7 +113,7 @@ export class DepositService {
           validators: {
             required: true,
             min: null,
-            max: 0
+            max: 10000
           },
         },
       ],
@@ -131,7 +131,7 @@ export class DepositService {
             validators: {
               required: true,
               min: null,
-              max: 0
+              max: 10000
             },
           },
           {
@@ -142,11 +142,11 @@ export class DepositService {
             validators: {
               required: true,
               min: null,
-              max: 0
+              max: 10000
             },
           },
         ],
-        maximumInnerBags: 0,
+        maximumInnerBags: 1,
         aggregated: false,
         innerBagRule: undefined
       },
@@ -158,7 +158,14 @@ export class DepositService {
   }
 
   setSelectedDeposit(deposit: JsonFormSchema) {
+    this.innerBagSchemas.next([]);
     this.depositSelectedSubject.next(deposit);
+
+    const innerBagRule = deposit.innerBagRule;
+    if (innerBagRule) {
+      const updatedInnerBagSchemas = [...this.innerBagSchemas.getValue(), innerBagRule];
+      this.innerBagSchemas.next(updatedInnerBagSchemas);
+    }
   }
 
   addInnerBagSchema() {
