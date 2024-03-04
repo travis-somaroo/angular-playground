@@ -21,13 +21,9 @@ import { InputNumberModule } from 'primeng/inputnumber';
   templateUrl: './json-form.component.html',
 })
 export class JsonFormComponent implements OnInit {
-  @Input()
-  set schema(s: Partial<JsonFormSchema>) {
-    console.log('schema in json form comp', s);
-    this.formSchema = s;
-  }
-
   private fb = inject(FormBuilder);
+
+
 
   formSchema!: Partial<JsonFormSchema>;
   formGroup!: FormGroup;

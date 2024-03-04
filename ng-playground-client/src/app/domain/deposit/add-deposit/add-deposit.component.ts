@@ -9,6 +9,7 @@ import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { DepositService } from './deposit.service';
 import { ButtonModule } from 'primeng/button';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { DenominationsTableComponent } from '../denominations-table/denominations-table.component';
 
 @Component({
   selector: 'app-add-deposit',
@@ -21,7 +22,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
     AsyncPipe,
     NgForOf,
     JsonFormComponent,
-    ButtonModule
+    ButtonModule,
+    DenominationsTableComponent
   ],
   templateUrl: './add-deposit.component.html',
 })
