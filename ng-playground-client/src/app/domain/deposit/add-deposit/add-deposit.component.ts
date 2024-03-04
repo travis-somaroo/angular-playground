@@ -1,4 +1,4 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { JsonFormComponent } from '../../../shared/json-form/json-form.component';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DropdownChangeEvent, DropdownModule } from 'primeng/dropdown';
@@ -34,12 +34,6 @@ export class AddDepositComponent {
   activeTabIndex = 0;
   depositRuleCtrl = new FormControl<any>(undefined!, []);
 
-  constructor() {
-    effect(() => {
-      console.log('forms', this.innerBagForms());
-    });
-  }
-
   get aggregateValid() {
     const innerBagsTotal = this.innerBagForms()
       .map(form => +form.get('amount')?.getRawValue())
@@ -48,13 +42,13 @@ export class AddDepositComponent {
     return innerBagsTotal === outerBagTotal;
   }
 
+  // Non Aggregate totals
   get innerBagTotalAmountValid() {
     const innerBagsTotal = this.innerBagForms()
       .map(form => +form.get('amount').getRawValue())
       .reduce((acc, amount) => Number(acc) + Number(amount), 0);
 
     const denominationsTotal = this.denominations().reduce((acc, amount) => Number(acc) + Number(amount), 0);
-    console.log("foo");
     return innerBagsTotal === denominationsTotal;
   }
 
