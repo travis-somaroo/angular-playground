@@ -4,7 +4,7 @@ import { NgForOf, NgIf } from '@angular/common';
 import { CalendarModule } from 'primeng/calendar';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { ChangeDetectionStrategy, Component, inject, input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, inject, input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-json-form',
@@ -25,6 +25,9 @@ export class JsonFormComponent implements OnInit {
 
   formSchema = input<Partial<JsonFormSchema>>();
   formGroup!: FormGroup;
+
+  @Output()
+  formState = new EventEmitter<FormGroup>();
 
   ngOnInit() {
     this.initForm(this.formSchema().propertyRules);
@@ -53,6 +56,7 @@ export class JsonFormComponent implements OnInit {
         }
         this.formGroup.addControl(control.propertyName, this.fb.control(control.defaultValue, validatorsToAdd));
       }
+      this.formState.emit(this.formGroup);
     }
   }
 }

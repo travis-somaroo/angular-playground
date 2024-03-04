@@ -1,6 +1,6 @@
-import { Component, inject, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, effect, inject, QueryList, signal, ViewChildren } from '@angular/core';
 import { JsonFormComponent } from '../../../shared/json-form/json-form.component';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DropdownChangeEvent, DropdownModule } from 'primeng/dropdown';
 import { TabViewModule } from 'primeng/tabview';
 import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
@@ -27,44 +27,23 @@ import { DenominationsTableComponent } from '../denominations-table/denomination
 export class AddDepositComponent {
   protected depositService = inject(DepositService);
 
-  @ViewChild('outerBagFormCmp') outerBagsFormCmp!: JsonFormComponent;
-  @ViewChildren('innerBagFormCmp') innerBagsFormCmp!: QueryList<JsonFormComponent>;
+  outerBagForm = signal<FormGroup>(undefined!);
+  innerBagForms = signal<FormGroup[]>([]);
+
   @ViewChildren('denominationsTable') denominations!: QueryList<DenominationsTableComponent>;
 
   activeTabIndex = 0;
   depositRuleCtrl = new FormControl<any>(undefined!, []);
 
+  constructor() {
+    effect(() => {
+      console.log('forms', this.innerBagForms());
+    });
+  }
+
   onDepositSelected(event: DropdownChangeEvent) {
     this.depositService.setSelectedDeposit(event.value);
   }
-
-  // Aggregated validation rule
-  validAggregatedValidationRule(): boolean {
-    const outerBagTotal = this.outerBagsFormCmp?.formGroup?.get('totalAmount').getRawValue();
-
-    if (outerBagTotal > 0) {
-      const innerBagsTotal = this.innerBagsFormCmp
-        .map((c: JsonFormComponent) => c?.formGroup?.get('amount')?.getRawValue() || 0)
-        .reduce((acc, amount) => amount + acc, 0);
-
-      const denominationsTotal = this.denominations
-        .map((c: DenominationsTableComponent) => c.amount || 0)
-        .reduce((acc, amount) => acc + amount, 0);
-
-      console.log('outerBagTotal:', outerBagTotal);
-      console.log('innerBagsTotal:', innerBagsTotal);
-      console.log('denominationsTotal:', denominationsTotal);
-
-      const isValid = innerBagsTotal === denominationsTotal && outerBagTotal === innerBagsTotal;
-      console.log('isValid:', isValid);
-
-      return isValid;
-    }
-
-    return true;
-  }
-
-
 
   onSubmit() {
     console.log('submitted');
@@ -77,6 +56,7 @@ export class AddDepositComponent {
   protected onRemoveInnerBag(): void {
     if (this.depositService.innerBagSize > 1) {
       this.depositService.removeInnerBagSchema();
+      this.innerBagForms().pop();
       this.switchToPreviousTab();
     }
   }
@@ -89,5 +69,14 @@ export class AddDepositComponent {
     if (this.activeTabIndex > 0) {
       this.activeTabIndex -= 1;
     }
+  }
+
+  outerBagFormState(event: FormGroup) {
+    this.outerBagForm.set(event);
+
+  }
+
+  innerBagFormState(event: FormGroup) {
+    this.innerBagForms.update(bags => [...bags, event]);
   }
 }
