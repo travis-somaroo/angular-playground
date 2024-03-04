@@ -14,6 +14,12 @@
     </div>
   </div>
 
+  <ng-container *ngIf="depositService.schema$ | async as schema">
+    <div>
+      <app-json-form [formSchema]="schema" #outerBagFormCmp />
+    </div>
+  </ng-container>
+
   <div class="flex gap-2 justify-content-end">
     <p-button
       icon="pi pi-minus"
@@ -35,8 +41,16 @@
           <span>Inner Bag {{ i + 1 }}</span>
         </ng-template>
         <app-json-form [formSchema]="schema" #innerBagFormCmp/>
-        <app-denominations-table/>
+        <app-denominations-table #denominationsTable/>
       </p-tabPanel>
     </ng-container>
   </p-tabView>
+
+  <div>
+    <p-button
+      [disabled]="!validAggregatedValidationRule()"
+      label="Submit"
+      (onClick)="onSubmit()"
+    />
+  </div>
 </div>

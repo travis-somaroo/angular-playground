@@ -8,6 +8,7 @@ import { CurrencyPipe } from '@angular/common';
     CurrencyPipe
   ],
   template: `
+    <h4>Denominations Table</h4>
     <p>
       {{ amount | currency }}
     </p>
@@ -15,5 +16,5 @@ import { CurrencyPipe } from '@angular/common';
   styles: ``
 })
 export class DenominationsTableComponent {
-  amount = 100;
+  amount = 1000;
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, filter, map, Observable, shareReplay } from 'rxjs';
+import { BehaviorSubject, filter, map, Observable, shareReplay, tap } from 'rxjs';
 import { JsonFormSchema } from '../../../shared/json-form/json-form.model';
 import { toSignal } from '@angular/core/rxjs-interop';
 
@@ -116,6 +116,15 @@ export class DepositService {
             max: 10000
           },
         },
+        {
+          propertyName: "totalAmount",
+          displayName: "Total Amount",
+          defaultValue: "0",
+          type: "number",
+          validators: {
+            required: true,
+          },
+        },
       ],
       innerBagRule: {
         id: 3,
@@ -145,6 +154,15 @@ export class DepositService {
               max: 10000
             },
           },
+          {
+            propertyName: "amount",
+            displayName: "Amount",
+            defaultValue: "0",
+            type: "number",
+            validators: {
+              required: true,
+            },
+          },
         ],
         maximumInnerBags: 1,
         aggregated: false,
@@ -158,6 +176,7 @@ export class DepositService {
   }
 
   setSelectedDeposit(deposit: JsonFormSchema) {
+    console.log(deposit);
     this.innerBagSchemas.next([]);
     this.depositSelectedSubject.next(deposit);
 
