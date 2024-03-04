@@ -1,4 +1,4 @@
-import { Component, effect, inject, QueryList, signal, ViewChildren } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { JsonFormComponent } from '../../../shared/json-form/json-form.component';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DropdownChangeEvent, DropdownModule } from 'primeng/dropdown';
@@ -29,8 +29,7 @@ export class AddDepositComponent {
 
   outerBagForm = signal<FormGroup>(undefined!);
   innerBagForms = signal<FormGroup[]>([]);
-
-  @ViewChildren('denominationsTable') denominations!: QueryList<DenominationsTableComponent>;
+  denominations = signal<number[]>([]);
 
   activeTabIndex = 0;
   depositRuleCtrl = new FormControl<any>(undefined!, []);
@@ -41,12 +40,49 @@ export class AddDepositComponent {
     });
   }
 
+  get aggregateValid() {
+    const innerBagsTotal = this.innerBagForms()
+      .map(form => +form.get('amount')?.getRawValue())
+      .reduce((acc, amount) => Number(acc) + Number(amount), 0);
+    const outerBagTotal = Number(this.outerBagForm()?.get('totalAmount').getRawValue());
+    return innerBagsTotal === outerBagTotal;
+  }
+
+  get innerBagTotalAmountValid() {
+    const innerBagsTotal = this.innerBagForms()
+      .map(form => +form.get('amount').getRawValue())
+      .reduce((acc, amount) => Number(acc) + Number(amount), 0);
+
+    const denominationsTotal = this.denominations().reduce((acc, amount) => Number(acc) + Number(amount), 0);
+    console.log("foo");
+    return innerBagsTotal === denominationsTotal;
+  }
+
   onDepositSelected(event: DropdownChangeEvent) {
+    this.innerBagForms.set([]);
     this.depositService.setSelectedDeposit(event.value);
   }
 
   onSubmit() {
-    console.log('submitted');
+    const innerBags = this.innerBagForms().map(form => form.getRawValue());
+    const deposit = {
+      totalAmount: this.outerBagForm().get('totalAmount').getRawValue(),
+      products: this.denominations(),
+      innerBags
+    };
+    console.log(deposit);
+  }
+
+  outerBagEvent(event: FormGroup) {
+    this.outerBagForm.set(event);
+  }
+
+  innerBagEvent(event: FormGroup) {
+    this.innerBagForms.update(bags => [...bags, event]);
+  }
+
+  amountEvent(event: number) {
+    this.denominations.update(amounts => [...amounts, event]);
   }
 
   protected onAddInnerBag(): void {
@@ -71,12 +107,5 @@ export class AddDepositComponent {
     }
   }
 
-  outerBagFormState(event: FormGroup) {
-    this.outerBagForm.set(event);
 
-  }
-
-  innerBagFormState(event: FormGroup) {
-    this.innerBagForms.update(bags => [...bags, event]);
-  }
 }

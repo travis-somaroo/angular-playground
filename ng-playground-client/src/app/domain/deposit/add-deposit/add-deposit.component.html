@@ -16,7 +16,7 @@
 
   <ng-container *ngIf="depositService.schema$ | async as schema">
     <div>
-      <app-json-form [formSchema]="schema" (formState)="outerBagFormState($event)" #outerBagFormCmp />
+      <app-json-form [formSchema]="schema" (formState)="outerBagEvent($event)"/>
     </div>
   </ng-container>
 
@@ -40,16 +40,18 @@
           <i class="pi pi-shopping-bag mr-3"></i>
           <span>Inner Bag {{ i + 1 }}</span>
         </ng-template>
-        <app-json-form [formSchema]="schema" #innerBagFormCmp (formState)="innerBagFormState($event)"/>
-        <app-denominations-table #denominationsTable/>
+        <app-json-form [formSchema]="schema" (formState)="innerBagEvent($event)"/>
+        <app-denominations-table (amount)="amountEvent($event)"/>
       </p-tabPanel>
     </ng-container>
   </p-tabView>
 
-  <div>
+  <div *ngIf="depositService.depositSelected$ | async">
     <p-button
+      [disabled]="!aggregateValid || !innerBagTotalAmountValid"
       label="Submit"
       (onClick)="onSubmit()"
     />
   </div>
+
 </div>

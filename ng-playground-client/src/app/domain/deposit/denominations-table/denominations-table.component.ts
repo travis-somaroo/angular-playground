@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 
 @Component({
@@ -10,11 +10,19 @@ import { CurrencyPipe } from '@angular/common';
   template: `
     <h4>Denominations Table</h4>
     <p>
-      {{ amount | currency }}
+      {{ totalAmount | currency }}
     </p>
   `,
   styles: ``
 })
-export class DenominationsTableComponent {
-  amount = 1000;
+export class DenominationsTableComponent implements OnInit {
+  totalAmount = 1000;
+
+  @Output()
+  amount = new EventEmitter<number>();
+
+  ngOnInit(): void {
+    this.amount.emit(this.totalAmount);
+  }
+
 }
