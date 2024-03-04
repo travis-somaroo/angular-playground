@@ -1,14 +1,11 @@
 import { Component, inject, QueryList, ViewChildren } from '@angular/core';
 import { JsonFormComponent } from '../../../shared/json-form/json-form.component';
-import { filter, map, Observable, shareReplay } from 'rxjs';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { JsonFormSchema } from '../../../shared/json-form/json-form.model';
 import { DropdownChangeEvent, DropdownModule } from 'primeng/dropdown';
 import { TabViewModule } from 'primeng/tabview';
 import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { DepositService } from './deposit.service';
 import { ButtonModule } from 'primeng/button';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { DenominationsTableComponent } from '../denominations-table/denominations-table.component';
 
 @Component({
