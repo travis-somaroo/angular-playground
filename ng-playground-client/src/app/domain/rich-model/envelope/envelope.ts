@@ -1,11 +1,7 @@
-import { JsonFormComponent } from '../../../shared/json-form/json-form.component';
+import { FormGroup } from '@angular/forms';
 
-export class Envelope {
-  constructor(public products: any[], public jsonComp: JsonFormComponent) {
-  }
-
-  isValidEnvelope(): boolean {
-    return this.jsonComp.formGroup.valid;
-  }
-
+export interface Envelope {
+  products: any;
+  form: FormGroup;
 }
+

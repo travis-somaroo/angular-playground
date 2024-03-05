@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { AddDepositComponent } from './domain/deposit/add-deposit/add-deposit.component';
+import { AddDepositComponent } from './domain/rich-model/add-deposit/add-deposit.component';
 
 export const routes: Routes = [
   {

@@ -4,7 +4,16 @@ import { NgForOf, NgIf } from '@angular/common';
 import { CalendarModule } from 'primeng/calendar';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { ChangeDetectionStrategy, Component, EventEmitter, inject, input, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  inject, Input,
+  input, OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 
 @Component({
   selector: 'app-json-form',
@@ -20,17 +29,18 @@ import { ChangeDetectionStrategy, Component, EventEmitter, inject, input, OnInit
   ],
   templateUrl: './json-form.component.html',
 })
-export class JsonFormComponent implements OnInit {
-  private fb = inject(FormBuilder);
+export class JsonFormComponent implements OnChanges {
+  @Input()
+  formSchema!: Partial<JsonFormSchema>;
 
-  formSchema = input<Partial<JsonFormSchema>>();
   formGroup!: FormGroup;
 
-  @Output()
-  formState = new EventEmitter<FormGroup>();
+  private fb = inject(FormBuilder);
 
-  ngOnInit() {
-    this.initForm(this.formSchema().propertyRules);
+  ngOnChanges(changes: SimpleChanges): void {
+    if ('formSchema' in changes) {
+      this.initForm(this.formSchema?.propertyRules);
+    }
   }
 
   private initForm(controls: JsonFormControls[]) {
@@ -38,7 +48,6 @@ export class JsonFormComponent implements OnInit {
     if (controls) {
       for (const control of controls) {
         const validatorsToAdd = [];
-
         for (const [key, value] of Object.entries(control.validators)) {
           switch (key) {
             case 'min':
@@ -56,7 +65,6 @@ export class JsonFormComponent implements OnInit {
         }
         this.formGroup.addControl(control.propertyName, this.fb.control(control.defaultValue, validatorsToAdd));
       }
-      this.formState.emit(this.formGroup);
     }
   }
 }

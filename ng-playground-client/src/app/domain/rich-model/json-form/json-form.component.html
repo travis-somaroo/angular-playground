@@ -1,5 +1,5 @@
 <form [formGroup]="formGroup" class="grid">
-  <ng-container *ngFor="let control of formSchema().propertyRules">
+  <ng-container *ngFor="let control of formSchema.propertyRules">
     <div class="col-4">
       <div class="sbv-label">
         <label [innerText]="control.displayName"></label>

@@ -1,26 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, filter, map, Observable, shareReplay } from 'rxjs';
-import { JsonFormSchema } from '../../../shared/json-form/json-form.model';
-import { toSignal } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DepositService {
-  private innerBagSchemas = new BehaviorSubject<JsonFormSchema[]>([]);
-  innerBagSchemas$ = this.innerBagSchemas.asObservable();
-
-  private depositSelectedSubject = new BehaviorSubject<JsonFormSchema>(undefined!);
-  depositSelected$ = this.depositSelectedSubject.asObservable().pipe(
-    filter(d => !!d)
-  );
-
-  schema$: Observable<JsonFormSchema> = this.depositSelected$.pipe(
-    filter(s => !!s),
-    shareReplay(1)
-  );
-
-  private newSchema = toSignal(this.schema$.pipe(map(s => s.innerBagRule)));
+export class DepositRepositoryService {
 
   readonly depositTypes: any[] = [
     {
@@ -172,31 +155,4 @@ export class DepositService {
       },
     },
   ];
-
-  get innerBagSize() {
-    return this.innerBagSchemas.getValue().length;
-  }
-
-  setSelectedDeposit(deposit: JsonFormSchema) {
-    console.log(deposit);
-    this.innerBagSchemas.next([]);
-    this.depositSelectedSubject.next(deposit);
-
-    const innerBagRule = deposit.innerBagRule;
-    if (innerBagRule) {
-      const updatedInnerBagSchemas = [...this.innerBagSchemas.getValue(), innerBagRule];
-      this.innerBagSchemas.next(updatedInnerBagSchemas);
-    }
-  }
-
-  addInnerBagSchema() {
-    const currentSchemas = this.innerBagSchemas.value;
-    this.innerBagSchemas.next([...currentSchemas, this.newSchema()]);
-  }
-
-  removeInnerBagSchema() {
-    const currentSchemas = this.innerBagSchemas.value;
-    currentSchemas.pop();
-    this.innerBagSchemas.next([...currentSchemas]);
-  }
 }
