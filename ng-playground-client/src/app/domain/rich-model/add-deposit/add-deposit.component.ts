@@ -7,6 +7,7 @@ import { JsonFormSchema } from '../json-form/json-form.model';
 import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-add-deposit',
@@ -17,7 +18,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
     AsyncPipe,
     ReactiveFormsModule,
     NgIf,
-    NgForOf
+    NgForOf,
+    ButtonModule
   ],
   template: `
     <div>
@@ -31,6 +33,9 @@ import { toSignal } from '@angular/core/rxjs-interop';
         />
       </div>
       <div>
+        <p-button label="Add Envelope" (onClick)="addEnvelopeHandler()"/>
+      </div>
+      <div>
         <ng-container *ngIf="selectedDeposit$ | async">
           <ng-container *ngFor="let envelopeSchema of envelopeSchemas$ | async">
             <app-envelope [schema]="envelopeSchema"/>
@@ -39,7 +44,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
       </div>
     </div>
   `,
-  styles: ``
 })
 export class AddDepositComponent {
   protected repository = inject(DepositRepositoryService);
@@ -59,6 +63,7 @@ export class AddDepositComponent {
 
   depositTypeHandler(event: DropdownChangeEvent) {
     const deposit = event.value;
+
     console.debug('deposit selected', deposit);
     this.selectedDeposit$.next(deposit);
 
@@ -67,4 +72,8 @@ export class AddDepositComponent {
     }
   }
 
+  addEnvelopeHandler() {
+    const prevEnvelopes = this.envelopeSchemas$.value;
+    this.envelopeSchemas$.next([...prevEnvelopes, this.newEnvelopeSchema()])
+  }
 }
