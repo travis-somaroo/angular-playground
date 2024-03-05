@@ -6,7 +6,6 @@ import { BehaviorSubject, filter, map } from 'rxjs';
 import { JsonFormSchema } from '../json-form/json-form.model';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Envelope } from '../envelope/envelope';
 
 @Component({
   selector: 'app-add-deposit',
@@ -31,7 +30,7 @@ import { Envelope } from '../envelope/envelope';
       </div>
       <div>
         <ng-container *ngIf="selectedDeposit$ | async">
-          <app-envelope [schema]="envelopeSchema$ | async" (envelopeEvent)="envelopeEventHandler($event)"/>
+          <app-envelope [schema]="envelopeSchema$ | async"/>
         </ng-container>
       </div>
     </div>
@@ -51,10 +50,8 @@ export class AddDepositComponent {
   envelopeSchema$ = this.schema$.pipe(map(schema => schema.innerBagRule));
 
   depositTypeHandler(event: DropdownChangeEvent) {
+    console.debug(event.value);
     this.selectedDeposit$.next(event.value);
   }
 
-  envelopeEventHandler(envelope: Envelope) {
-    console.log('envelope', envelope);
-  }
 }

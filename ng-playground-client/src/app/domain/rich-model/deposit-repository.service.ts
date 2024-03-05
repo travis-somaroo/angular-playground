@@ -39,19 +39,15 @@ export class DepositRepositoryService {
             type: "text",
             validators: {
               required: true,
-              min: null,
-              max: 10000
             },
           },
           {
-            propertyName: "envelopeID",
-            displayName: "Envelope ID",
+            propertyName: "amount",
+            displayName: "Amount",
             defaultValue: "",
-            type: "text",
+            type: "number",
             validators: {
               required: true,
-              min: null,
-              max: 10000
             },
           },
           {
@@ -61,8 +57,6 @@ export class DepositRepositoryService {
             type: "text",
             validators: {
               required: true,
-              min: null,
-              max: 10000
             },
           },
           {
@@ -72,8 +66,6 @@ export class DepositRepositoryService {
             type: "text",
             validators: {
               required: true,
-              min: null,
-              max: 10000
             },
           },
         ],
@@ -97,8 +89,6 @@ export class DepositRepositoryService {
           type: "text",
           validators: {
             required: true,
-            min: null,
-            max: 10000
           },
         },
         {
@@ -124,8 +114,6 @@ export class DepositRepositoryService {
             type: "text",
             validators: {
               required: true,
-              min: null,
-              max: 10000
             },
           },
           {
@@ -133,17 +121,6 @@ export class DepositRepositoryService {
             displayName: "Store ID",
             defaultValue: "",
             type: "text",
-            validators: {
-              required: true,
-              min: null,
-              max: 10000
-            },
-          },
-          {
-            propertyName: "amount",
-            displayName: "Amount",
-            defaultValue: "0",
-            type: "number",
             validators: {
               required: true,
             },
