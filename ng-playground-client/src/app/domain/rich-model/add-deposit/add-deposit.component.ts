@@ -30,7 +30,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
       </div>
       <div>
         <ng-container *ngIf="selectedDeposit$ | async">
-          <app-envelope [schema]="envelopeSchema$ | async"/>
+          <app-envelope [schema$]="envelopeSchema$"/>
         </ng-container>
       </div>
     </div>
@@ -47,6 +47,7 @@ export class AddDepositComponent {
   schema$ = this.selectedDeposit$.asObservable().pipe(
     filter(deposit => !!deposit)
   );
+
   envelopeSchema$ = this.schema$.pipe(map(schema => schema.innerBagRule));
 
   depositTypeHandler(event: DropdownChangeEvent) {
