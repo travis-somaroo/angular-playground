@@ -6,45 +6,49 @@ import { DenominationsTableComponent } from '../denominations-table/denomination
 import { SharedModule } from 'primeng/api';
 import { Envelope } from './envelope';
 import { AsyncPipe, NgIf } from '@angular/common';
-import { Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
-  selector: 'app-envelope',
-  standalone: true,
-  imports: [
-    JsonFormComponent,
-    DenominationsTableComponent,
-    SharedModule,
-    TabViewModule,
-    NgIf,
-    AsyncPipe
-  ],
-  template: `
-    <div class="border-1 border-gray-300 p-1">
-      <h2>This represents 1 envelope</h2>
-      <div>
-        <ng-container *ngIf="schema$ | async as schema">
-          <app-json-form [formSchema]="schema" #jsonForm/>
-        </ng-container>
-        <h4>Denominations</h4>
-        <app-denominations-table/>
-      </div>
-    </div>
-  `,
-  styles: ``
+    selector: 'app-envelope',
+    standalone: true,
+    imports: [
+        JsonFormComponent,
+        DenominationsTableComponent,
+        SharedModule,
+        TabViewModule,
+        NgIf,
+        AsyncPipe
+    ],
+    template: `
+        <div class="border-1 border-gray-300 p-1">
+            <h2>This represents 1 envelope</h2>
+            <div>
+                <ng-container *ngIf="schema$ | async as schema">
+                    <app-json-form [formSchema]="schema" #jsonForm/>
+                </ng-container>
+                <h4>Denominations</h4>
+                <app-denominations-table/>
+            </div>
+        </div>
+    `,
+    styles: ``
 })
 export class EnvelopeComponent implements AfterViewInit {
-  @Input() schema$!: Observable<JsonFormSchema>;
+    schema$ = new BehaviorSubject<JsonFormSchema>(undefined!);
 
-  envelope!: Envelope;
+    @Input() set schema(schema: JsonFormSchema) {
+        this.schema$.next(schema);
+    }
 
-  @ViewChild('jsonForm') jsonFormComp!: JsonFormComponent;
+    envelope!: Envelope;
 
-  ngAfterViewInit() {
-    this.schema$.subscribe(() => {
-      this.envelope = new Envelope([], this.jsonFormComp);
-      console.log('envelope', this.envelope);
-      console.log('envelope valid', this.envelope.isValidEnvelope());
-    });
-  }
+    @ViewChild('jsonForm') jsonFormComp!: JsonFormComponent;
+
+    ngAfterViewInit() {
+        this.schema$.subscribe(() => {
+            this.envelope = new Envelope([], this.jsonFormComp);
+            console.log('envelope', this.envelope);
+            console.log('envelope valid', this.envelope.isValidEnvelope());
+        });
+    }
 }

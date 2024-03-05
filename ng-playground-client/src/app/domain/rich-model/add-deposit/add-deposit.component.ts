@@ -4,8 +4,9 @@ import { DropdownChangeEvent, DropdownModule } from 'primeng/dropdown';
 import { DepositRepositoryService } from '../deposit-repository.service';
 import { BehaviorSubject, filter, map } from 'rxjs';
 import { JsonFormSchema } from '../json-form/json-form.model';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-add-deposit',
@@ -15,7 +16,8 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
     DropdownModule,
     AsyncPipe,
     ReactiveFormsModule,
-    NgIf
+    NgIf,
+    NgForOf
   ],
   template: `
     <div>
@@ -30,7 +32,9 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
       </div>
       <div>
         <ng-container *ngIf="selectedDeposit$ | async">
-          <app-envelope [schema$]="envelopeSchema$"/>
+          <ng-container *ngFor="let envelopeSchema of envelopeSchemas$ | async">
+            <app-envelope [schema]="envelopeSchema"/>
+          </ng-container>
         </ng-container>
       </div>
     </div>
@@ -39,8 +43,9 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 })
 export class AddDepositComponent {
   protected repository = inject(DepositRepositoryService);
+  protected depositTypeCtrl = new FormControl();
 
-  depositTypeCtrl = new FormControl();
+  envelopeSchemas$ = new BehaviorSubject<JsonFormSchema[]>([]);
 
   selectedDeposit$ = new BehaviorSubject<JsonFormSchema>(undefined!);
 
@@ -50,9 +55,16 @@ export class AddDepositComponent {
 
   envelopeSchema$ = this.schema$.pipe(map(schema => schema.innerBagRule));
 
+  newEnvelopeSchema = toSignal(this.envelopeSchema$);
+
   depositTypeHandler(event: DropdownChangeEvent) {
-    console.debug(event.value);
-    this.selectedDeposit$.next(event.value);
+    const deposit = event.value;
+    console.debug('deposit selected', deposit);
+    this.selectedDeposit$.next(deposit);
+
+    if (this.newEnvelopeSchema()) {
+      this.envelopeSchemas$.next([...this.envelopeSchemas$.value, this.newEnvelopeSchema()])
+    }
   }
 
 }
