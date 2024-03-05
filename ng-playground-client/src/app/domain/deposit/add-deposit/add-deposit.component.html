@@ -48,7 +48,6 @@
 
   <div *ngIf="depositService.depositSelected$ | async">
     <p-button
-      [disabled]="!aggregateValid || !innerBagTotalAmountValid"
       label="Submit"
       (onClick)="onSubmit()"
     />

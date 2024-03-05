@@ -34,23 +34,6 @@ export class AddDepositComponent {
   activeTabIndex = 0;
   depositRuleCtrl = new FormControl<any>(undefined!, []);
 
-  get aggregateValid() {
-    const innerBagsTotal = this.innerBagForms()
-      .map(form => +form.get('amount')?.getRawValue())
-      .reduce((acc, amount) => Number(acc) + Number(amount), 0);
-    const outerBagTotal = Number(this.outerBagForm()?.get('totalAmount').getRawValue());
-    return innerBagsTotal === outerBagTotal;
-  }
-
-  // Non Aggregate totals
-  get innerBagTotalAmountValid() {
-    const innerBagsTotal = this.innerBagForms()
-      .map(form => +form.get('amount').getRawValue())
-      .reduce((acc, amount) => Number(acc) + Number(amount), 0);
-
-    const denominationsTotal = this.denominations().reduce((acc, amount) => Number(acc) + Number(amount), 0);
-    return innerBagsTotal === denominationsTotal;
-  }
 
   onDepositSelected(event: DropdownChangeEvent) {
     this.innerBagForms.set([]);
