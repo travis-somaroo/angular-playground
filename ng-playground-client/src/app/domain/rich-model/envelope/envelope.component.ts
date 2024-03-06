@@ -61,5 +61,8 @@ export class EnvelopeComponent implements AfterViewInit {
 
   toggleDenominationsHandler() {
     this.envelope().hasDenominations = !this.envelope().hasDenominations;
+    if (!this.envelope().hasDenominations) {
+      this.envelope().products = [];
+    }
   }
 }

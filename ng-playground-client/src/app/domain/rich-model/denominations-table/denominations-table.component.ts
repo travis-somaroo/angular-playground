@@ -32,9 +32,11 @@ import { ButtonModule } from 'primeng/button';
   `
 })
 export class DenominationsTableComponent {
+  private fb = inject(FormBuilder);
+
   @Output()
   updatedProducts = new EventEmitter<any[]>();
-  private fb = inject(FormBuilder);
+
   form = this.fb.group({
     products: this.fb.array([
       this.fb.group({

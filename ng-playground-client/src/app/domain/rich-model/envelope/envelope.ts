@@ -1,12 +1,11 @@
 import { JsonFormComponent } from '../json-form/json-form.component';
 
 export class Envelope {
-  constructor(public _products: any[], public _jsonComp: JsonFormComponent, public _hasDenominations: boolean = false
+  constructor(
+    public _products: any[],
+    public _jsonComp: JsonFormComponent,
+    public _hasDenominations: boolean = false
   ) {
-  }
-
-  set jsonComp(value: JsonFormComponent) {
-    this._jsonComp = value;
   }
 
   set products(value: any[]) {
