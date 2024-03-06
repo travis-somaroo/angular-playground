@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, computed, effect, EventEmitter, input, Output, viewChild } from '@angular/core';
 import { TabViewModule } from 'primeng/tabview';
 import { JsonFormComponent } from '../json-form/json-form.component';
 import { JsonFormSchema } from '../json-form/json-form.model';
@@ -6,49 +6,55 @@ import { DenominationsTableComponent } from '../denominations-table/denomination
 import { SharedModule } from 'primeng/api';
 import { Envelope } from './envelope';
 import { AsyncPipe, NgIf } from '@angular/common';
-import { BehaviorSubject } from 'rxjs';
 
 @Component({
-    selector: 'app-envelope',
-    standalone: true,
-    imports: [
-        JsonFormComponent,
-        DenominationsTableComponent,
-        SharedModule,
-        TabViewModule,
-        NgIf,
-        AsyncPipe
-    ],
-    template: `
-        <div class="border-1 border-gray-300 p-1">
-            <h2>This represents 1 envelope</h2>
-            <div>
-                <ng-container *ngIf="schema$ | async as schema">
-                    <app-json-form [formSchema]="schema" #jsonForm/>
-                </ng-container>
-                <h4>Denominations</h4>
-                <app-denominations-table/>
-            </div>
-        </div>
-    `,
-    styles: ``
+  selector: 'app-envelope',
+  standalone: true,
+  imports: [
+    JsonFormComponent,
+    DenominationsTableComponent,
+    SharedModule,
+    TabViewModule,
+    NgIf,
+    AsyncPipe
+  ],
+  template: `
+    <div class="border-1 border-gray-300 p-5">
+      <h3>Envelope {{ envelopeNum() }}</h3>
+      <div>
+        @if (schema()) {
+          <app-json-form [formSchema]="schema()" #jsonFormComp/>
+        }
+        <h4>Denominations</h4>
+        <app-denominations-table (updatedProducts)="updatedProductsHandler($event)" #denominationsComp/>
+      </div>
+    </div>
+  `
 })
 export class EnvelopeComponent implements AfterViewInit {
-    schema$ = new BehaviorSubject<JsonFormSchema>(undefined!);
+  schema = input.required<JsonFormSchema>();
+  envelopeNum = input.required<number>();
 
-    @Input() set schema(schema: JsonFormSchema) {
-        this.schema$.next(schema);
-    }
+  jsonFormComp = viewChild<JsonFormComponent>('jsonFormComp');
+  denominationsComp = viewChild<DenominationsTableComponent>('denominationsComp');
 
-    envelope!: Envelope;
+  envelope = computed(() => {
+    return new Envelope(this.denominationsComp().form.controls.products.getRawValue(), this.jsonFormComp());
+  });
 
-    @ViewChild('jsonForm') jsonFormComp!: JsonFormComponent;
+  @Output() newEnvelope = new EventEmitter<Envelope>();
 
-    ngAfterViewInit() {
-        this.schema$.subscribe(() => {
-            this.envelope = new Envelope([], this.jsonFormComp);
-            console.log('envelope', this.envelope);
-            console.log('envelope valid', this.envelope.isValidEnvelope());
-        });
-    }
+  constructor() {
+    effect(() => {
+      console.log('envelope', this.envelope());
+    });
+  }
+
+  ngAfterViewInit() {
+    this.newEnvelope.emit(this.envelope());
+  }
+
+  updatedProductsHandler(products: any[]) {
+    this.envelope().products = products;
+  }
 }
