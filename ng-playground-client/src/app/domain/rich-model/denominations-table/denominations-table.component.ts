@@ -1,7 +1,7 @@
 import { Component, EventEmitter, inject, Output } from '@angular/core';
-import { NgForOf } from '@angular/common';
-import { InputNumberInputEvent, InputNumberModule } from 'primeng/inputnumber';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { CurrencyPipe, NgForOf } from '@angular/common';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { FormArray, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
@@ -11,61 +11,60 @@ import { ButtonModule } from 'primeng/button';
     InputNumberModule,
     NgForOf,
     ReactiveFormsModule,
-    ButtonModule
+    ButtonModule,
+    CurrencyPipe
   ],
   template: `
     <div [formGroup]="form">
       <div formArrayName="products">
-        <ng-container *ngFor="let product of products.controls; let i = index">
-          <div class="mb-3" [formGroupName]="i">
-            <label class="mr-3">Denomination {{ i + 1 }}</label>
-            <p-inputNumber formControlName="quantity" [placeholder]="'Enter quantity'"
-                           (onInput)="productUpdateHandler($event)" [min]="0"/>
+        @for (product of products.controls; track product; let i = $index) {
+          <div class="flex align-items-center gap-3 mb-3" [formGroupName]="i">
+            <label class="w-4">{{ product.get('amount').value | currency:'ZAR':'R' }}</label>
+            <p-inputNumber
+              [min]="0"
+              [formControlName]="'quantity'"
+              [placeholder]="'Enter quantity'"
+              (onInput)="productUpdateHandler()"/>
           </div>
-        </ng-container>
+        }
       </div>
-      <p-button (onClick)="logHandler()" label="Test"/>
     </div>
-  `,
-  styles: ``
+  `
 })
 export class DenominationsTableComponent {
-  private fb = inject(FormBuilder);
-
   @Output()
   updatedProducts = new EventEmitter<any[]>();
-
+  private fb = inject(FormBuilder);
   form = this.fb.group({
-    products: this.fb.array([])
+    products: this.fb.array([
+      this.fb.group({
+        amount: [5, []],
+        quantity: [0, []]
+      }),
+      this.fb.group({
+        amount: [10, []],
+        quantity: [0, []]
+      }),
+      this.fb.group({
+        amount: [20, []],
+        quantity: [0, []]
+      }),
+      this.fb.group({
+        amount: [50, []],
+        quantity: [0, []]
+      }),
+      this.fb.group({
+        amount: [100, []],
+        quantity: [0, []]
+      })
+    ])
   });
-
-  constructor() {
-    this.addProducts();
-  }
 
   protected get products(): FormArray {
     return this.form.controls.products as FormArray;
   }
 
-  private addProducts() {
-    const productsCtrl = this.form.controls.products as FormArray;
-    for (let i = 0; i < 4; i++) {
-      productsCtrl.push(this.createProduct());
-    }
-  }
-
-  private createProduct(): FormGroup {
-    return this.fb.group({
-      amount: [100, []],
-      quantity: [0, []]
-    });
-  }
-
-  logHandler() {
-    console.log(this.form.controls.products.getRawValue());
-  }
-
-  productUpdateHandler(event: InputNumberInputEvent) {
+  productUpdateHandler() {
     this.updatedProducts.emit(this.products.getRawValue());
   }
 }

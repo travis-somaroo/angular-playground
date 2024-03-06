@@ -4,16 +4,7 @@ import { NgForOf, NgIf } from '@angular/common';
 import { CalendarModule } from 'primeng/calendar';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  inject, Input,
-  input, OnChanges,
-  OnInit,
-  Output,
-  SimpleChanges
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-json-form',
@@ -27,7 +18,7 @@ import {
     InputNumberModule,
     ReactiveFormsModule
   ],
-  templateUrl: './json-form.component.html',
+  templateUrl: './json-form.component.html'
 })
 export class JsonFormComponent implements OnChanges {
   @Input()

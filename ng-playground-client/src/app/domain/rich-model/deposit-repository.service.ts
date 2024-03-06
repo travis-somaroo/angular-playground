@@ -23,8 +23,8 @@ export class DepositRepositoryService {
             required: true,
             min: null,
             max: 10000
-          },
-        },
+          }
+        }
       ],
       innerBagRule: {
         id: 2,
@@ -38,8 +38,8 @@ export class DepositRepositoryService {
             defaultValue: "",
             type: "text",
             validators: {
-              required: true,
-            },
+              required: true
+            }
           },
           {
             propertyName: "amount",
@@ -47,8 +47,8 @@ export class DepositRepositoryService {
             defaultValue: "",
             type: "number",
             validators: {
-              required: true,
-            },
+              required: true
+            }
           },
           {
             propertyName: "depositID1",
@@ -56,8 +56,8 @@ export class DepositRepositoryService {
             defaultValue: "",
             type: "text",
             validators: {
-              required: true,
-            },
+              required: true
+            }
           },
           {
             propertyName: "depositID3",
@@ -65,14 +65,14 @@ export class DepositRepositoryService {
             defaultValue: "",
             type: "text",
             validators: {
-              required: true,
-            },
-          },
+              required: true
+            }
+          }
         ],
         innerBagRule: undefined,
         maximumInnerBags: 0,
         aggregated: false
-      },
+      }
     },
     {
       id: 3,
@@ -88,8 +88,8 @@ export class DepositRepositoryService {
           defaultValue: "",
           type: "text",
           validators: {
-            required: true,
-          },
+            required: true
+          }
         },
         {
           propertyName: "totalAmount",
@@ -97,9 +97,9 @@ export class DepositRepositoryService {
           defaultValue: "0",
           type: "number",
           validators: {
-            required: true,
-          },
-        },
+            required: true
+          }
+        }
       ],
       innerBagRule: {
         id: 3,
@@ -113,8 +113,8 @@ export class DepositRepositoryService {
             defaultValue: "",
             type: "text",
             validators: {
-              required: true,
-            },
+              required: true
+            }
           },
           {
             propertyName: "storeId",
@@ -122,14 +122,14 @@ export class DepositRepositoryService {
             defaultValue: "",
             type: "text",
             validators: {
-              required: true,
-            },
-          },
+              required: true
+            }
+          }
         ],
         maximumInnerBags: 1,
         aggregated: false,
         innerBagRule: undefined
-      },
-    },
+      }
+    }
   ];
 }
