@@ -63,7 +63,8 @@ export class AddDepositComponent {
   selectedDeposit = signal<JsonFormSchema>(undefined!);
   schema = computed(() => this.selectedDeposit());
   envelopeSchema = computed(() => this.schema().innerBagRule);
-  newEnvelopeSchema = computed(() => this.envelopeSchema());
+  newEnvelopeSchema = computed(() => this.envelopeSchema())
+
   protected repository = inject(DepositRepositoryService);
   protected depositTypeCtrl = new FormControl();
 
