@@ -1,5 +1,6 @@
 import { Directive, inject, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { debounceTime } from 'rxjs';
 
 @Directive({
   selector: 'form',
@@ -7,6 +8,8 @@ import { NgForm } from '@angular/forms';
 })
 export class FormDirective {
   private readonly ngForm = inject(NgForm, {self: true});
-  @Output() formValueChange = this.ngForm.form.valueChanges;
+  @Output() formValueChange = this.ngForm.form.valueChanges.pipe(
+    debounceTime(0)
+  );
 
 }

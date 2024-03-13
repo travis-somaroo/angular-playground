@@ -11,15 +11,6 @@ export type AddressFormModel = Partial<{
   country: string;
 }>
 
-// Important if we want nested components with ngModelGroup
-export const templateDrivenFormsViewProviders = [
-  {
-    provide: ControlContainer,
-    useExisting: NgForm
-  },
-  formViewProvider
-];
-
 @Component({
   selector: 'app-address-form',
   standalone: true,
@@ -28,7 +19,10 @@ export const templateDrivenFormsViewProviders = [
     InputTextModule
   ],
   templateUrl: './address-form.component.html',
-  viewProviders: [templateDrivenFormsViewProviders],
+  viewProviders: [
+    {provide: ControlContainer, useExisting: NgForm},
+    formViewProvider // very important if we want nested components with ngModelGroup
+  ]
 })
 export class AddressFormComponent {
   @Input() address?: AddressFormModel | null;

@@ -1,47 +1,31 @@
 <div class="grid">
   <div class="col-6">
     <h1>Simple Template Driven Form</h1>
-    <form (formValueChange)="onSetForm($event)">
-      <div class="flex flex-column gap-3">
+    <form (formValueChange)="setFormValue($event)">
+      <div class="flex flex-column gap-1">
         <div class="field">
-          <label>
-            <span>First Name</span>
-          </label>
-          <div>
-            <input pInputText name="firstName" [ngModel]="vm.formValue.firstName"/>
-          </div>
+          <label class="mr-3">First Name</label>
+          <input pInputText name="firstName" [ngModel]="vm.formValue.firstName"/>
         </div>
 
         <div class="field">
-          <label>
-            <span>Last Name</span>
-          </label>
-          <div>
-            <input pInputText name="lastName" [ngModel]="vm.formValue.lastName"/>
-          </div>
+          <label class="mr-3">Last Name</label>
+          <input pInputText name="lastName" [ngModel]="vm.formValue.lastName"/>
         </div>
 
         <div class="field">
-          <label>
-            <span>Age</span>
-          </label>
-          <div>
-            <input pInputText name="age" [ngModel]="vm.formValue.age"/>
-          </div>
+          <label class="mr-3">Age</label>
+          <input pInputText name="age" [ngModel]="vm.formValue.age"/>
         </div>
 
         <div class="field">
-          <label>
-            <span>Emergency Contact</span>
-          </label>
-          <div>
-            <input
-              pInputText
-              name="emergencyContactNumber"
-              [disabled]="vm.emergencyContactDisabled"
-              [ngModel]="vm.formValue.emergencyContactNumber"
-            />
-          </div>
+          <label class="mr-3">Emergency Contact</label>
+          <input
+            pInputText
+            name="emergencyContactNumber"
+            [disabled]="vm.emergencyContactDisabled"
+            [ngModel]="vm.formValue.emergencyContactNumber"
+          />
         </div>
 
         <div class="field">
@@ -66,9 +50,9 @@
           </label>
         </div>
         <div ngModelGroup="addresses">
-          <div ngModelGroup="billingAddress">
-            <h2>Billing address</h2>
-            <app-address-form [address]="vm.formValue.addresses?.billingAddress"/>
+          <div>
+            <h3>Billing address</h3>
+            <app-address-form ngModelGroup="billingAddress" [address]="vm.formValue.addresses?.billingAddress"/>
           </div>
 
           <div class="field">
@@ -84,13 +68,14 @@
             </div>
           </div>
 
-          <div *ngIf="vm.showShippingAddress" ngModelGroup="shippingAddress">
-            <h2>Shipping address</h2>
-            <app-address-form [address]="vm.formValue.addresses?.shippingAddress"/>
+          <div *ngIf="vm.showShippingAddress">
+            <h3>Shipping address</h3>
+            <app-address-form ngModelGroup="shippingAddress" [address]="vm.shippingAddress"/>
           </div>
         </div>
 
-        <div>
+        <div class="flex gap-3">
+          <p-button type="button" label="View" (click)="editMode.set(false)"/>
           <p-button type="submit" label="Submit" (onClick)="submitHandler()"/>
         </div>
       </div>

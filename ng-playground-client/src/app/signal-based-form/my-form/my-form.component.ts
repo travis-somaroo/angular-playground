@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, effect, signal } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
@@ -43,19 +43,29 @@ export type AddressFormModel = Partial<{
     RadioButtonModule,
     AddressFormComponent,
     CheckboxModule,
-    NgIf,
+    NgIf
   ],
-  templateUrl: './my-form.component.html',
+  templateUrl: './my-form.component.html'
+
 })
 export class MyFormComponent {
-  protected readonly formValue = signal<PurchaseFormModel>({});
+  private readonly formValue = signal<PurchaseFormModel>({});
+  private readonly shippingAddress = signal(null);
 
-  protected readonly viewModel = computed(() => ({
+  shippingAddressEff = effect(() => {
+    console.log('shipping address signal', this.shippingAddress());
+  });
+
+  readonly editMode = signal(false);
+
+  readonly viewModel = computed(() => ({
       formValue: this.formValue(),
+      showShippingAddress:
+      this.formValue().addresses?.shippingAddressDifferentFromBillingAddress,
       showOtherGender: this.formValue().gender === 'other',
-      showShippingAddress: this.formValue().addresses?.shippingAddressDifferentFromBillingAddress,
       emergencyContactDisabled:
-        this.formValue().age === 0 || this.formValue().age > 17
+        this.formValue().age === 0 || this.formValue().age > 17,
+      shippingAddress: this.formValue().addresses?.shippingAddress || this.shippingAddress()
     })
   );
 
@@ -67,7 +77,12 @@ export class MyFormComponent {
     console.log(this.formValue());
   }
 
-  onSetForm(event: any) {
+  setFormValue(event: PurchaseFormModel) {
+    console.log('event', event);
     this.formValue.set(event);
+    if (event.addresses?.shippingAddress) {
+      this.shippingAddress.set(event.addresses?.shippingAddress);
+    }
   }
 }
+
