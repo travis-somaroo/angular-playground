@@ -1,10 +1,15 @@
 import { Routes } from '@angular/router';
-import { MyFormComponent } from './signal-based-form/my-form/my-form.component';
 import { NgReactiveFormComponent } from './ng-reactive-form/ng-reactive-form/ng-reactive-form.component';
+import { MyFormComponent } from './complex-signal-based-form/components/my-form/my-form.component';
+import { SimpleFormComponent } from './simple-signal-based-form/components/simple-form/simple-form.component';
 
 export const routes: Routes = [
   {
-    path: 'signal',
+    path: 'simple-signal',
+    component: SimpleFormComponent
+  },
+  {
+    path: 'complex-signal',
     component: MyFormComponent
   },
   {
@@ -13,7 +18,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'signal',
+    redirectTo: 'simple-signal',
     pathMatch: 'full'
   }
 ];

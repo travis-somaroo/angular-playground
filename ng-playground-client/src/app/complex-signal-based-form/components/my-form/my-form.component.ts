@@ -1,35 +1,15 @@
-import { Component, computed, effect, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
 import { JsonPipe, NgIf } from '@angular/common';
-import { FormDirective } from '../directives/form.directive';
+import { FormDirective } from '../../directives/form.directive';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { AddressFormComponent } from '../address-form/address-form.component';
 import { CheckboxModule } from 'primeng/checkbox';
+import { PurchaseFormModel } from '../../model/purchase-form.model';
+import { purchaseFormValidations } from '../../validations/purchase-form.validations';
 
-export type PurchaseFormModel = Partial<{
-  firstName: string;
-  lastName: string;
-  gender: 'male' | 'female' | 'other';
-  genderOther?: string;
-  age: number;
-  emergencyContactNumber: string;
-  addresses: Partial<{
-    billingAddress: AddressFormModel;
-    shippingAddress: AddressFormModel;
-    shippingAddressDifferentFromBillingAddress: boolean;
-  }>;
-}>;
-
-
-export type AddressFormModel = Partial<{
-  street: string;
-  number: string;
-  city: string;
-  zipcode: string;
-  country: string;
-}>
 
 @Component({
   selector: 'app-my-form',
@@ -51,10 +31,6 @@ export type AddressFormModel = Partial<{
 export class MyFormComponent {
   private readonly formValue = signal<PurchaseFormModel>({});
   private readonly shippingAddress = signal(null);
-
-  shippingAddressEff = effect(() => {
-    console.log('shipping address signal', this.shippingAddress());
-  });
 
   readonly editMode = signal(false);
 

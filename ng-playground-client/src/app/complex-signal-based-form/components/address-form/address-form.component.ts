@@ -1,15 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { ControlContainer, FormsModule, NgForm } from '@angular/forms';
-import { formViewProvider } from '../functions/view-provider';
+import { formViewProvider } from '../../functions/view-provider';
 import { InputTextModule } from 'primeng/inputtext';
-
-export type AddressFormModel = Partial<{
-  street: string;
-  number: string;
-  city: string;
-  zipcode: string;
-  country: string;
-}>
+import { AddressFormModel } from '../../model/purchase-form.model';
 
 @Component({
   selector: 'app-address-form',
