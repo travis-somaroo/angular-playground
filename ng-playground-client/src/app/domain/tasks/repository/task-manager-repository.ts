@@ -6,7 +6,7 @@ import { Item, TaskList } from '../model/task-list';
 @Injectable({
   providedIn: 'root'
 })
-export class TaskManagerClient {
+export class TaskManagerRepository {
 
   constructor(private httpClient: HttpClient) {
   }

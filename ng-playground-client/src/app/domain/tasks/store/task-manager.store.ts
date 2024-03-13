@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Store } from './store';
+import { Store } from '../../../infastructure/store/store';
 import { Item, TaskList } from '../model/task-list';
 
 @Injectable({
