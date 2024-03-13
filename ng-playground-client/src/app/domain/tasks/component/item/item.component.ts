@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
+import { Item } from '../../model/task-list';
 
 @Component({
   selector: 'app-item',
@@ -6,11 +7,11 @@ import { Component } from '@angular/core';
   imports: [],
   template: `
     <div>
-      <span class="fw-bold">{{ item.name }}</span>
+      <span class="fw-bold">{{ item().name }}</span>
     </div>
   `,
   styles: ``
 })
 export class ItemComponent {
-  // item = input;
+  item = input.required<Item>();
 }

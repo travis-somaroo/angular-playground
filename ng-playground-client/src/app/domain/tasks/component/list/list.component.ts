@@ -7,6 +7,7 @@ import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FormsModule } from '@angular/forms';
 import { ItemComponent } from '../item/item.component';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-list',
@@ -16,7 +17,8 @@ import { ItemComponent } from '../item/item.component';
     ButtonModule,
     CheckboxModule,
     FormsModule,
-    ItemComponent
+    ItemComponent,
+    InputTextModule
   ],
   template: `
     @if (list$ | async; as list) {
@@ -33,11 +35,24 @@ import { ItemComponent } from '../item/item.component';
                 [ngModel]="item.checked"
                 (ngModelChange)="switchHandler(list.id, item.id, !item.checked)"
               />
-              <app-item/>
+              <app-item [item]="item"/>
             </li>
+          } @empty {
+            <h4>No items found.</h4>
           }
         </ul>
       </div>
+
+      <form>
+        <div class="grid">
+          <div class="col-8">
+            <input pInputText placeholder="Item name" (input)="inputHandler($event)">
+          </div>
+          <div class="col">
+            <button pButton label="Add" (click)="createNewItemHandler(list.id)"></button>
+          </div>
+        </div>
+      </form>
     }
   `,
   styles: ``
@@ -52,7 +67,7 @@ export class ListComponent {
 
   newItemName = signal<string>('');
 
-  createNewItem(listId: number): void {
+  createNewItemHandler(listId: number): void {
     this.service.addItem(listId, this.newItemName());
     this.newItemName.set('');
   }
@@ -65,4 +80,9 @@ export class ListComponent {
     this.service.switch(listId, itemId, value);
   }
 
+  inputHandler(event: Event) {
+    console.log('event', event);
+    const value = event.target['value'];
+    this.newItemName.set(value);
+  }
 }
