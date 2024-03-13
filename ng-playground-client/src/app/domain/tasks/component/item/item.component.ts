@@ -5,12 +5,12 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   template: `
-    <p>
-      item works!
-    </p>
+    <div>
+      <span class="fw-bold">{{ item.name }}</span>
+    </div>
   `,
   styles: ``
 })
 export class ItemComponent {
-
+  // item = input;
 }
