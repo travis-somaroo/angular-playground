@@ -8,6 +8,7 @@ import { debounceTime } from 'rxjs';
 })
 export class FormDirective {
   private readonly ngForm = inject(NgForm, {self: true});
+  // The NgForm directive subscribes to value changes on our behalf
   @Output() formValueChange = this.ngForm.form.valueChanges.pipe(
     debounceTime(0)
   );

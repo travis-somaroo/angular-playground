@@ -41,11 +41,12 @@
 
         <div>
           <label>
+            <!--Change to to ngIf to remove the gender-->
             <input
-              *ngIf="vm.showOtherGender"
               pInputText
               [ngModel]="vm.formValue.genderOther"
               name="genderOther"
+              [attr.type]="vm.showOtherGender ? 'text' : 'hidden'"
             />
           </label>
         </div>
