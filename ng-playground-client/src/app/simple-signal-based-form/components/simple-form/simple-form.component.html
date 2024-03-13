@@ -1,53 +1,59 @@
-<form
-  [alwaysTriggerValidations]="true"
-  [formValue]="formValue()"
-  [suite]="suite"
-  (formValueChange)="formValue.set($event)">
-  <div class="grid">
-    <div appControlWrapper>
-      <input
-        pInputText
-        name="firstName"
-        [ngModel]="formValue().firstName"
-        placeholder="First Name"/>
-    </div>
-    <div appControlWrapper>
-      <input
-        pInputText
-        name="lastName"
-        [ngModel]="formValue().lastName"
-        placeholder="Last Name"/>
-    </div>
-    <div appControlWrapper>
-      <p-inputNumber
-        name="age"
-        [ngModel]="formValue().age"
-        placeholder="Age"/>
-    </div>
-    <div appControlWrapper>
-      <p-inputNumber
-        name="emergencyContant"
-        [ngModel]="formValue().emergencyContact"
-        placeholder="Emergency Contact"/>
-    </div>
-    <div class="flex gap-3" ngModelGroup="passwords" appControlWrapper>
-      <div appControlWrapper>
-        <input
-          pInputText
-          name="password"
-          [ngModel]="formValue().passwords?.password"
-          placeholder="Password"/>
+<h1>Simple Signal Form</h1>
+<div class="py-3">
+  <form
+    [alwaysTriggerValidations]="true"
+    [formValue]="formValue()"
+    [suite]="suite"
+    (formValueChange)="formValue.set($event)">
+    <div class="grid">
+      <div class="col-6">
+        <div appControlWrapper>
+          <input
+            pInputText
+            name="firstName"
+            [ngModel]="formValue().firstName"
+            placeholder="First Name"/>
+        </div>
+        <div appControlWrapper>
+          <input
+            pInputText
+            name="lastName"
+            [ngModel]="formValue().lastName"
+            placeholder="Last Name"/>
+        </div>
+        <div appControlWrapper>
+          <p-inputNumber
+            name="age"
+            [ngModel]="formValue().age"
+            placeholder="Age"/>
+        </div>
+        <div appControlWrapper>
+          <p-inputNumber
+            name="emergencyContact"
+            [ngModel]="formValue().emergencyContact"
+            placeholder="Emergency Contact"/>
+        </div>
+        <div class="flex gap-3" ngModelGroup="passwords" appControlWrapper>
+          <div appControlWrapper>
+            <input
+              pInputText
+              name="password"
+              [ngModel]="formValue().passwords?.password"
+              placeholder="Password"/>
+          </div>
+          <div appControlWrapper>
+            <input
+              pInputText
+              name="confirmPassword"
+              [ngModel]="formValue().passwords?.confirmPassword"
+              placeholder="Confirm Password"/>
+          </div>
+        </div>
       </div>
-      <div appControlWrapper>
-        <input
-          pInputText
-            ="confirmPassword"
-          [ngModel]="formValue().passwords?.confirmPassword"
-          placeholder="Confirm Password"/>
+      <div class="col-6">
+        <h3>Form Object</h3>
+        <pre>{{ formValue() | json }}</pre>
       </div>
     </div>
-
-  </div>
-</form>
-
-<pre>{{ formValue() | json }}</pre>
+  </form>
+</div>
