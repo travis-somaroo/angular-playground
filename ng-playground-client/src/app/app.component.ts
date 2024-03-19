@@ -10,11 +10,17 @@ import { HideAfterDirective } from './directive/hide-after.directive';
   template: `
     <div>
       <h1>Structural Directives</h1>
-      <section *hideAfter="5000; then placeholder" class="primary-banner">
+      <section *hideAfter="5000 as time; then placeholder; let counter = counter; let myDefault" class="primary-banner">
         <h2>Temp content</h2>
-        <p>This layout will disappear in 5 seconds</p>
+        <p>This layout will disappear in {{ time }}/{{ myDefault }} seconds. It disappears in {{ counter }}</p>
       </section>
     </div>
+
+    <!--Value should be the property defined in the context-->
+    <ng-template #placeholder let-hiddenAfter="hideAfter" let-defaultValue>
+      <p class="text-black-500">This is a placeholder. It took {{ hiddenAfter }} seconds to render
+        this. {{ defaultValue }}</p>
+    </ng-template>
 
     <!--Generated code-->
     <!--    <ng-template hideAfter>-->
@@ -23,10 +29,6 @@ import { HideAfterDirective } from './directive/hide-after.directive';
     <!--        <p>This layout will disappear in 5 seconds</p>-->
     <!--      </section>-->
     <!--    </ng-template>-->
-
-    <ng-template #placeholder>
-      <p class="text-black-500">This is a placeholder</p>
-    </ng-template>
   `,
   styles: `
     .primary-banner {
