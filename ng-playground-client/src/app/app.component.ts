@@ -14,16 +14,31 @@ import { FeedbackDirective } from './directive/feedback.directive';
     <div class="grid col-offset-4">
       <div class="col-4" [formGroup]="customerSignupForm">
         <div class="field flex flex-column gap-3">
-          <label>Email</label>
-          <input pInputText formControlName="email" feedback controlLabel="Email"/>
+          <label for="email">Email</label>
+          <input
+            id="email"
+            pInputText
+            formControlName="email"
+            feedback
+          />
         </div>
         <div class="field flex flex-column gap-3">
-          <label>Password</label>
-          <input pInputText formControlName="password" feedback controlLabel="Password">
+          <label for="password">Password</label>
+          <input
+            id="password"
+            pInputText
+            formControlName="password"
+            feedback
+          />
         </div>
         <div class="field flex flex-column gap-3">
-          <label>Confirm Password</label>
-          <input pInputText formControlName="confirmPassword" feedback controlLabel="Confirm Password">
+          <label for="confirm-email">Confirm Password</label>
+          <input
+            id="confirm-email"
+            pInputText
+            formControlName="confirmPassword"
+            feedback
+          />
         </div>
       </div>
     </div>
