@@ -41,11 +41,11 @@ export class DonutWidgetComponent {
   chartConfig = computed<Partial<DonutChartConfig>>(() => ({
     chart: {
       type: 'donut',
-      height: '300',
-      width: '300',
+      height: '325',
+      width: '325',
       animations: {
         enabled: true,
-        easing: 'linear',
+        easing: 'easeinout',
         speed: 500,
         dynamicAnimation: {
           enabled: true,
@@ -59,7 +59,7 @@ export class DonutWidgetComponent {
     legend: {
       fontFamily: 'roboto',
       fontWeight: '700',
-      fontSize: '1rem',
+      fontSize: '9px',
       offsetY: -15,
       offsetX: 5,
       width: 150,
@@ -67,7 +67,7 @@ export class DonutWidgetComponent {
       markers: {
         offsetY: 3,
         offsetX: -5,
-        radius: 4
+        radius: 3
       }
     },
     dataLabels: {
