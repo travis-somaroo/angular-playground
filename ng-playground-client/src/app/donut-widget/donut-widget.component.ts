@@ -22,23 +22,21 @@ import { ColorScheme, DisplayType, DonutChartConfig } from './donut-chart.model'
   styles: ``
 })
 export class DonutWidgetComponent {
-
   series = input.required<number[]>();
+  labels = input.required<string[]>();
   deviation = input<number>();
 
-  // TODO - Travis group the template config
-  labels = input.required<string[]>();
-  colorScheme = input.required<ColorScheme>();
   displayFormat = input<DisplayType>();
+  colorScheme = input.required<ColorScheme>();
 
-  formatter = () => this.displayFormat() === DisplayType.CHANGE
+  private formatter = () => this.displayFormat() === DisplayType.CHANGE
     ? (this.deviation() < 0
       ? `${this.deviation()}`
       : `+${this.deviation()}`) : 'AVG';
 
-  displayType = () => this.displayFormat() === DisplayType.AVERAGE ? `${this.deviation()}%` : `${this.deviation()}`;
+  private displayType = () => this.displayFormat() === DisplayType.AVERAGE ? `${this.deviation()}%` : `${this.deviation()}`;
 
-  chartConfig = computed<Partial<DonutChartConfig>>(() => ({
+  protected chartConfig = computed<Partial<DonutChartConfig>>(() => ({
     chart: {
       type: 'donut',
       height: '325',
@@ -105,7 +103,7 @@ export class DonutWidgetComponent {
     }
   }));
 
-  get colors(): string[] {
+  private get colors(): string[] {
     const colorSchemes = {
       [ColorScheme.DULL]: ['#AF144B', '#14329B', '#296143', '#4CA7AB', '#589CD0'],
       [ColorScheme.BLUE_MONO]: ['#03A9F4', '#ABDAF0', '#00618E'],

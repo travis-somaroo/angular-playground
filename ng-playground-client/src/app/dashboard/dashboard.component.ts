@@ -21,7 +21,7 @@ import { ColorScheme, DisplayType } from '../donut-widget/donut-chart.model';
   `
 })
 export class DashboardComponent {
-
+  // ! Stefan/Richard The api needs to send through the inputs and chart type to render.
   protected readonly ColorScheme = ColorScheme;
   protected readonly DisplayType = DisplayType;
 }
