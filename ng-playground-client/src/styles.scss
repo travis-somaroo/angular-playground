@@ -25,3 +25,22 @@
     cursor: pointer;
   }
 }
+
+
+.deviation-text {
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 12px;
+  letter-spacing: 2px;
+  color: #C2C6C8;
+}
+
+// Deviation colors
+
+.increase {
+  color: #4BA6AA;
+}
+
+.decrease {
+  color: #FD5622;
+}

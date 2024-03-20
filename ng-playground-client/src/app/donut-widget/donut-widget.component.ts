@@ -1,14 +1,15 @@
 import { Component, computed, input } from '@angular/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { ColorScheme, DisplayType, DonutChartConfig } from './donut-chart.model';
-import { TitleCasePipe } from '@angular/common';
+import { NgClass, TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-donut-widget',
   standalone: true,
   imports: [
     NgApexchartsModule,
-    TitleCasePipe
+    TitleCasePipe,
+    NgClass
   ],
   template: `
     <div class="widget-wrapper">
@@ -17,6 +18,11 @@ import { TitleCasePipe } from '@angular/common';
         @if (id()) {
           <i class="pi pi-arrow-up-right widget-icon" (click)="navigationHandler()"></i>
         }
+        <!--TODO: Travis Don't render if not clickable-->
+        <div class="flex gap-1 align-items-center ">
+          <span class="deviation-text">{{ deviationChange() }}</span>
+          <i class="pi text-sm" [ngClass]="deviation() > 0 ? 'pi-arrow-circle-up increase' : 'pi-arrow-circle-down decrease'"></i>
+        </div>
       </div>
       <div class="widget-content">
         <apx-chart
@@ -42,6 +48,11 @@ export class DonutWidgetComponent {
 
   displayFormat = input.required<DisplayType>();
   colorScheme = input.required<ColorScheme>();
+
+
+  protected deviationChange = computed<string>(() => {
+    return this.deviation() > 0 ? `+${this.deviation()}%` : `${this.deviation()}%`;
+  });
 
   protected chartConfig = computed<Partial<DonutChartConfig>>(() => ({
     chart: {
