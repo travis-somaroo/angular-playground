@@ -4,7 +4,8 @@
 .widget-wrapper {
   width: 18rem;
   height: 13rem;
-  border: 1px solid #eceeef;
+  border-radius: 5px;
+  border: 1px solid #ECEEEF;
   padding: 0.5rem 0.75rem;
 }
 
@@ -13,4 +14,14 @@
   align-items: center;
   justify-content: space-between;
   height: 2.5rem;
+}
+
+.widget-title {
+  font-size: 1.15rem;
+}
+
+.widget-icon {
+  &:hover {
+    cursor: pointer;
+  }
 }

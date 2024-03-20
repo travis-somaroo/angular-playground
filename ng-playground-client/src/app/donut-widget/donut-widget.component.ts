@@ -15,7 +15,7 @@ import { TitleCasePipe } from '@angular/common';
       <div class="widget-header">
         <h5 class="widget-title">{{ title() | titlecase }}</h5>
         @if (id()) {
-          <i class="pi pi-arrow-up-right icon" (click)="navigationHandler()"></i>
+          <i class="pi pi-arrow-up-right widget-icon" (click)="navigationHandler()"></i>
         }
       </div>
       <div class="widget-content">
@@ -48,6 +48,8 @@ export class DonutWidgetComponent {
       type: 'donut',
       height: '325',
       width: '325',
+      offsetX: -20,
+      offsetY: 10,
       animations: {
         enabled: true,
         easing: 'easeinout',
@@ -64,15 +66,18 @@ export class DonutWidgetComponent {
     legend: {
       fontFamily: 'roboto',
       fontWeight: '700',
-      fontSize: '9px',
+      fontSize: '8px',
       offsetY: -15,
-      offsetX: 5,
+      offsetX: -10,
       width: 150,
       height: 300,
       markers: {
         offsetY: 3,
         offsetX: -5,
         radius: 3
+      },
+      itemMargin: {
+        vertical: 4
       }
     },
     dataLabels: {
@@ -83,6 +88,7 @@ export class DonutWidgetComponent {
         customScale: 1,
         donut: {
           background: 'transparent',
+          size: '90%',
           labels: {
             show: true,
             name: {
@@ -92,13 +98,13 @@ export class DonutWidgetComponent {
             },
             value: {
               show: true,
-              fontSize: '0.65rem',
+              fontSize: '0.85rem',
               color: '#A3A3A3FF'
             },
             total: {
               show: true,
               showAlways: true,
-              fontSize: '1.25rem',
+              fontSize: '1.75rem',
               fontFamily: 'roboto',
               fontWeight: '700',
               color: '#445660FF',
