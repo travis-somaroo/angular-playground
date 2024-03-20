@@ -1,40 +1,47 @@
 import { Component, computed, input } from '@angular/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { ColorScheme, DisplayType, DonutChartConfig } from './donut-chart.model';
+import { TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-donut-widget',
   standalone: true,
   imports: [
-    NgApexchartsModule
+    NgApexchartsModule,
+    TitleCasePipe
   ],
   template: `
-    <apx-chart
-      [series]="series()"
-      [labels]="labels()"
-      [chart]="chartConfig().chart"
-      [legend]="chartConfig().legend"
-      [colors]="chartConfig().colors"
-      [dataLabels]="chartConfig().dataLabels"
-      [plotOptions]="chartConfig().plotOptions"
-    ></apx-chart>
-  `,
-  styles: ``
+    <div class="widget-wrapper">
+      <div class="widget-header">
+        <h5 class="widget-title">{{ title() | titlecase }}</h5>
+        @if (id()) {
+          <i class="pi pi-arrow-up-right icon" (click)="navigationHandler()"></i>
+        }
+      </div>
+      <div class="widget-content">
+        <apx-chart
+          [series]="series()"
+          [labels]="labels()"
+          [chart]="chartConfig().chart"
+          [legend]="chartConfig().legend"
+          [colors]="chartConfig().colors"
+          [dataLabels]="chartConfig().dataLabels"
+          [plotOptions]="chartConfig().plotOptions"
+        ></apx-chart>
+      </div>
+    </div>
+  `
 })
 export class DonutWidgetComponent {
+  id = input.required<number>();
+  title = input.required<string>();
+
   series = input.required<number[]>();
   labels = input.required<string[]>();
   deviation = input<number>();
 
-  displayFormat = input<DisplayType>();
+  displayFormat = input.required<DisplayType>();
   colorScheme = input.required<ColorScheme>();
-
-  private formatter = () => this.displayFormat() === DisplayType.CHANGE
-    ? (this.deviation() < 0
-      ? `${this.deviation()}`
-      : `+${this.deviation()}`) : 'AVG';
-
-  private displayType = () => this.displayFormat() === DisplayType.AVERAGE ? `${this.deviation()}%` : `${this.deviation()}`;
 
   protected chartConfig = computed<Partial<DonutChartConfig>>(() => ({
     chart: {
@@ -103,6 +110,13 @@ export class DonutWidgetComponent {
     }
   }));
 
+  private formatter = () => this.displayFormat() === DisplayType.CHANGE
+    ? (this.deviation() < 0
+      ? `${this.deviation()}`
+      : `+${this.deviation()}`) : 'AVG';
+
+  private displayType = () => this.displayFormat() === DisplayType.AVERAGE ? `${this.deviation()}%` : `${this.deviation()}`;
+
   private get colors(): string[] {
     const colorSchemes = {
       [ColorScheme.DULL]: ['#AF144B', '#14329B', '#296143', '#4CA7AB', '#589CD0'],
@@ -113,4 +127,7 @@ export class DonutWidgetComponent {
     return colorSchemes[this.colorScheme()] || colorSchemes[ColorScheme.DEFAULT];
   }
 
+  navigationHandler() {
+    // emit id
+  }
 }

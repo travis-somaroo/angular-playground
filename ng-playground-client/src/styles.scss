@@ -1,2 +1,16 @@
 @import "../node_modules/primeflex/primeflex.scss";
 @import "../node_modules/primeicons/primeicons.css";
+
+.widget-wrapper {
+  width: 18rem;
+  height: 13rem;
+  border: 1px solid #eceeef;
+  padding: 0.5rem 0.75rem;
+}
+
+.widget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 2.5rem;
+}

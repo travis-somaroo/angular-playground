@@ -9,19 +9,23 @@ import { ColorScheme, DisplayType } from '../donut-widget/donut-chart.model';
     DonutWidgetComponent
   ],
   template: `
-    <div>
-      <app-donut-widget
-        [series]="[132,254,99,112]"
-        [deviation]="2"
-        [labels]="['IN SLA', 'APPROACHING', 'OUT OF SLA', 'PAUSED']"
-        [colorScheme]="ColorScheme.DEFAULT"
-        [displayFormat]="DisplayType.AVERAGE"
-      />
+    <div class="grid">
+      <div class="col-3">
+        <app-donut-widget
+          [id]="1"
+          [title]="'Case Management'"
+          [series]="[23,56,34,12]"
+          [labels]="['IN SLA', 'OUT OF SLA', 'APPROACHING SLA', 'IN PROGRESS']"
+          [deviation]="2"
+          [colorScheme]="ColorScheme.DEFAULT"
+          [displayFormat]="DisplayType.AVERAGE"
+        />
+      </div>
     </div>
   `
 })
 export class DashboardComponent {
-  // ! Stefan/Richard The api needs to send through the inputs and chart type to render.
+
   protected readonly ColorScheme = ColorScheme;
   protected readonly DisplayType = DisplayType;
 }

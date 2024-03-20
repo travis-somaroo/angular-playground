@@ -21,3 +21,6 @@ export enum DisplayType {
   AVERAGE = 'average',
   CHANGE = 'change',
 }
+
+
+
