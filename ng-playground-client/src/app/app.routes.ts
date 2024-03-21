@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { WidgetComponent } from './widget/widget.component';
+import { WidgetComponent } from './demo-01/widget/widget.component';
 
 export const routes: Routes = [
   {
