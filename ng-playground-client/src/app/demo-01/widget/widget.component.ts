@@ -49,13 +49,18 @@ export class WidgetComponent {
   tasks$: Observable<Task[]> = this.service.load();
   error: Error | null = null;
 
+  // * this method throws an error
   addTaskHandler() {
-    // * unreliable method
+    // ! not good for async errors, it won't be handled
     try {
-      this.service.addTaskSync({id: 0, title: 'New Task'});
+      setTimeout(() => {
+        this.service.addTaskSync({id: 0, title: 'New Task'});
+      });
     } catch (error) {
       if (error instanceof Error) {
         this.error = error;
+        // * Throws it a global try catch used by Angular, it notifies our custom error handler
+        throw error;
       }
     }
   }
