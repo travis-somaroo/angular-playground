@@ -5,7 +5,6 @@ import { Task } from '../../task.model';
 import { TaskService } from './task.service';
 import { AsyncPipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
-import { SkeletonModule } from 'primeng/skeleton';
 import { WidgetErrorComponent } from '../error/widget-error.component';
 
 @Component({
@@ -18,31 +17,30 @@ import { WidgetErrorComponent } from '../error/widget-error.component';
     WidgetErrorComponent
   ],
   template: `
-    @if (error) {
-      <app-widget-error class="error" [error]="error"></app-widget-error>
-    } @else {
-      <div class="grid">
-        <div class="col-4 col-offset-4">
-          <div class="border-2 border-solid border-round border-black-100 p-3">
-            <h2>Backlog Widget</h2>
-            <p-divider/>
-            <section>
-              <ul>
-                @if (tasks$ | async; as tasks) {
-                  @for (task of tasks; track task) {
-                    <li>{{ task.title }}</li>
-                  }
-                  @if (tasks.length === 0) {
-                    <li>No tasks in backlog</li>
-                  }
+    <div class="grid">
+      <div class="col-4 col-offset-4">
+        <div class="border-2 border-solid border-round border-black-100 p-3">
+          @if (error) {
+            <app-widget-error class="error" [error]="error"/>
+          }
+          <h2>Backlog Widget</h2>
+          <p-divider/>
+          <section>
+            <ul>
+              @if (tasks$ | async; as tasks) {
+                @for (task of tasks; track task) {
+                  <li>{{ task.title }}</li>
                 }
-              </ul>
-              <p-button styleClass="w-full" [outlined]="true" (onClick)="addTaskHandler()" label="Add Task"/>
-            </section>
-          </div>
+                @if (tasks.length === 0) {
+                  <li>No tasks in backlog</li>
+                }
+              }
+            </ul>
+            <p-button styleClass="w-full" [outlined]="true" (onClick)="addTaskHandler()" label="Add Task"/>
+          </section>
         </div>
       </div>
-    }
+    </div>
   `
 })
 export class WidgetComponent {
@@ -53,7 +51,13 @@ export class WidgetComponent {
 
   addTaskHandler() {
     // * unreliable method
-    this.service.addTaskSync({ id: 0, title: 'New Task' });
+    try {
+      this.service.addTaskSync({id: 0, title: 'New Task'});
+    } catch (error) {
+      if (error instanceof Error) {
+        this.error = error;
+      }
+    }
   }
 
 }

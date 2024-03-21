@@ -1,11 +1,14 @@
 import { Component, input } from '@angular/core';
+import { MessageModule } from 'primeng/message';
 
 @Component({
   selector: 'app-widget-error',
   standalone: true,
+  imports: [
+    MessageModule
+  ],
   template: `
-    <h4>Widget Error: </h4>
-    <p class="text-red-500 text-xl">{{ error()?.message }}</p>
+    <p-message styleClass="w-full" severity="error" [text]="error()?.message"/>
   `
 })
 export class WidgetErrorComponent {
