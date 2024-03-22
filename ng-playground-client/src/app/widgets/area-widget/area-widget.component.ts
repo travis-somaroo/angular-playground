@@ -50,7 +50,7 @@ export class AreaWidgetComponent {
         name: this.peakSeries().name,
         type: "line",
         data: this.peakSeries().data ?? [],
-        color: "#216A89"
+        color: "#014866"
       }
     ],
     chart: {
@@ -76,8 +76,8 @@ export class AreaWidgetComponent {
     stroke: {
       curve: "smooth",
       width: 1.5,
-      colors: ["#03A8F2"],
-      dashArray: [0, 5],
+      colors: ["#03a7f0"],
+      dashArray: [0, 3],
     },
     labels: this.labels() ?? [],
     xaxis: {
