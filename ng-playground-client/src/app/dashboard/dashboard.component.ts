@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
-import { DonutWidgetComponent } from '../donut-widget/donut-widget.component';
-import { ColorScheme, DisplayType } from '../donut-widget/donut-chart.model';
+import { DonutWidgetComponent } from '../widgets/donut-widget/donut-widget.component';
+import { ColorScheme, DisplayType } from '../widgets/donut-widget/donut-widget.model';
+import { AreaWidgetComponent } from '../widgets/area-widget/area-widget.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
-    DonutWidgetComponent
+    DonutWidgetComponent,
+    AreaWidgetComponent
   ],
   template: `
     <div class="grid">
@@ -19,6 +21,14 @@ import { ColorScheme, DisplayType } from '../donut-widget/donut-chart.model';
           [deviation]="2"
           [colorScheme]="ColorScheme.DEFAULT"
           [displayFormat]="DisplayType.AVERAGE"
+        />
+      </div>
+
+      <div class="col-3">
+        <app-area-widget
+          [series]="{name: 'Active', data: [5,10,2,25,19]}"
+          [peakSeries]="{name: 'Peak', data: [25,25,25,25,25]}"
+          [labels]="['PEAK', 'ACTIVE']"
         />
       </div>
     </div>

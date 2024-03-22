@@ -1,6 +1,6 @@
 import { Component, computed, input } from '@angular/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { ColorScheme, DisplayType, DonutChartConfig } from './donut-chart.model';
+import { ColorScheme, DisplayType, DonutChartConfig } from './donut-widget.model';
 import { NgClass, TitleCasePipe } from '@angular/common';
 
 @Component({
@@ -21,12 +21,13 @@ import { NgClass, TitleCasePipe } from '@angular/common';
         <!--TODO: Travis Don't render if not clickable-->
         <div class="flex gap-1 align-items-center ">
           <span class="deviation-text">{{ deviationChange() }}</span>
-          <i class="pi text-sm" [ngClass]="deviation() > 0 ? 'pi-arrow-circle-up increase' : 'pi-arrow-circle-down decrease'"></i>
+          <i class="pi text-sm"
+             [ngClass]="deviation() > 0 ? 'pi-arrow-circle-up increase' : 'pi-arrow-circle-down decrease'"></i>
         </div>
       </div>
       <div class="widget-content">
         <apx-chart
-          [series]="series()"
+          [series]="chartConfig().series"
           [labels]="labels()"
           [chart]="chartConfig().chart"
           [legend]="chartConfig().legend"
@@ -57,8 +58,8 @@ export class DonutWidgetComponent {
   protected chartConfig = computed<Partial<DonutChartConfig>>(() => ({
     chart: {
       type: 'donut',
-      height: '325',
-      width: '325',
+      height: 325,
+      width: 325,
       offsetX: -20,
       offsetY: 10,
       animations: {
@@ -75,8 +76,8 @@ export class DonutWidgetComponent {
     labels: this.labels() ?? [],
     colors: this.colors,
     legend: {
-      fontFamily: 'roboto',
-      fontWeight: '700',
+      fontFamily: 'Roboto, sans-serif',
+      fontWeight: 700,
       fontSize: '8px',
       offsetY: -15,
       offsetX: -10,
@@ -117,7 +118,7 @@ export class DonutWidgetComponent {
               showAlways: true,
               fontSize: '1.75rem',
               fontFamily: 'roboto',
-              fontWeight: '700',
+              fontWeight: 700,
               color: '#445660FF',
               formatter: this.formatter
             }
