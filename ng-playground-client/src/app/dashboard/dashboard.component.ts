@@ -26,6 +26,10 @@ import { AreaWidgetComponent } from '../widgets/area-widget/area-widget.componen
 
       <div class="col-3">
         <app-area-widget
+          [id]="2"
+          [title]="'Active Users'"
+          [total]="1432"
+          [deviation]="-2"
           [series]="{name: 'Active', data: [5,10,2,25,19]}"
           [peakSeries]="{name: 'Peak', data: [25,25,25,25,25]}"
           [labels]="['PEAK', 'ACTIVE']"

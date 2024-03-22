@@ -44,3 +44,29 @@
 .decrease {
   color: #FD5622;
 }
+
+.circle {
+  display: inline-block;
+  position: relative;
+}
+
+.circle:before {
+  left: 50%;
+  top: 50%;
+  content: "";
+  z-index: -1;
+  width: 20px;
+  height: 20px;
+  display: block;
+  border-radius: 50%;
+  position: absolute;
+  background-color: #03a8f2;
+  transform: translate(-50%, -50%);
+}
+
+.total {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 40px;
+  font-style: normal;
+}

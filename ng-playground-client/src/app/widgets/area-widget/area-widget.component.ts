@@ -1,15 +1,27 @@
-import { Component, computed, effect, input } from "@angular/core";
+import { Component, computed, input } from "@angular/core";
 import { NgApexchartsModule } from "ng-apexcharts";
 import { AreaChartConfig, Series } from "./area-widget.model";
+import { NgClass, TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: "app-area-widget",
   standalone: true,
   imports: [
-    NgApexchartsModule
+    NgApexchartsModule,
+    TitleCasePipe,
+    NgClass
   ],
   template: `
-    <div>
+    <div class="widget-wrapper">
+      <div class="widget-header">
+        <h5 class="widget-title">{{ title() | titlecase }}</h5>
+        @if (id()) {
+          <i class="pi pi-arrow-up-right widget-icon" (click)="navigationHandler()"></i>
+        }
+      </div>
+      <div class="">
+        <span class="total">{{ total() }}</span>
+      </div>
       <apx-chart
         [series]="chartConfig().series"
         [labels]="labels()"
@@ -29,22 +41,21 @@ import { AreaChartConfig, Series } from "./area-widget.model";
   styles: ``
 })
 export class AreaWidgetComponent {
+  id = input.required<number>();
+  title = input.required<string>();
+
+  total = input.required<number>();
+  deviation = input.required<number>();
   series = input.required<Series>();
   peakSeries = input.required<Series>();
   labels = input.required<string[]>();
-
-  constructor() {
-    effect(() => {
-      console.log(this.peakSeries());
-    });
-  }
 
   protected chartConfig = computed<Partial<AreaChartConfig>>(() => ({
     series: [
       {
         name: this.series().name,
         type: "area",
-        data: this.series().data ?? [],
+        data: this.series().data ?? []
       },
       {
         name: this.peakSeries().name,
@@ -56,7 +67,9 @@ export class AreaWidgetComponent {
     chart: {
       type: "line",
       height: 100,
-      width: 325,
+      width: 300,
+      offsetY: 35,
+      offsetX: -24,
       stacked: false,
       zoom: {
         enabled: false
@@ -77,7 +90,7 @@ export class AreaWidgetComponent {
       curve: "smooth",
       width: 1.5,
       colors: ["#03a7f0"],
-      dashArray: [0, 3],
+      dashArray: [0, 3]
     },
     labels: this.labels() ?? [],
     xaxis: {
@@ -107,7 +120,7 @@ export class AreaWidgetComponent {
       }
     },
     fill: {
-      opacity: 0.4,
+      opacity: 0.4
     },
     tooltip: {
       enabled: false
@@ -116,5 +129,9 @@ export class AreaWidgetComponent {
 
   private categories(data: number[], name: string): string[] {
     return data.map(() => name.toUpperCase());
+  }
+
+  navigationHandler() {
+
   }
 }
