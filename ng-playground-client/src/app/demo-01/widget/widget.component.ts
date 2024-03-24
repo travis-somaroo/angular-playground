@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { DividerModule } from 'primeng/divider';
-import { Observable } from 'rxjs';
+import { catchError, Observable, of, tap } from 'rxjs';
 import { Task } from '../../task.model';
 import { TaskService } from './task.service';
 import { AsyncPipe } from '@angular/common';
@@ -46,7 +46,19 @@ import { WidgetErrorComponent } from '../error/widget-error.component';
 export class WidgetComponent {
   private service = inject(TaskService);
 
-  tasks$: Observable<Task[]> = this.service.load();
+  tasks$: Observable<Task[]> = this.service.load().pipe(
+    tap({
+      error: err => {
+        this.error = err
+        console.log('Updated components error property...')
+      }
+    }),
+    catchError(err => {
+      console.log('Replacing the failed observable with an empty array...')
+      return of([])
+    }),
+  );
+
   error: Error | null = null;
 
   // * this method throws an error

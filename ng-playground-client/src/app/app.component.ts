@@ -10,7 +10,7 @@ import { ToastModule } from 'primeng/toast';
   providers: [],
   template:
     `
-      <p-toast key="global" position="bottom-center"/>
+      <p-toast key="global"/>
       <router-outlet/>
     `
 })
