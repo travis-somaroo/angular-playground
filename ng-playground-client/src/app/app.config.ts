@@ -13,7 +13,8 @@ export const appConfig: ApplicationConfig = {
   providers: [
     MessageService,
     provideRouter(routes),
-    provideHttpClient(withInterceptors([globalErrorHandlerInterceptor])),
+    //provideHttpClient(withInterceptors([globalErrorHandlerInterceptor])),
+    provideHttpClient(),
     importProvidersFrom([BrowserModule, BrowserAnimationsModule]),
     {
       // If this class is provided, use the custom one instead.
