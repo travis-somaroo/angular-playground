@@ -22,8 +22,13 @@ import { WidgetLegendComponent } from '../../component/widget-legend/widget-lege
         }
       </div>
       <div class="widget-content">
-        <div class="">
+        <div class="flex align-items-center gap-2">
           <span class="total">{{ total() }}</span>
+          <span class="deviation-text flex flex-column">
+            <i class="pi"
+               [ngClass]="deviation() > 0 ? 'pi-arrow-circle-up increase' : 'pi-arrow-circle-down decrease'"></i>
+            <small>{{ deviation() }}</small>
+          </span>
         </div>
         <apx-chart
           [series]="chartConfig().series"
@@ -50,9 +55,16 @@ import { WidgetLegendComponent } from '../../component/widget-legend/widget-lege
   `,
   styles: `
     .widget-footer {
-      height: 2rem;
       display: flex;
       gap: 1rem;
+    }
+
+    .increase {
+      color: #03a8f2;
+    }
+
+    .decrease {
+      color: #03a8f2;
     }
   `
 })
@@ -126,7 +138,8 @@ export class AreaWidgetComponent {
     grid: {
       xaxis: {
         lines: {
-          show: true
+          show: true,
+          offsetX: 10
         }
       },
       yaxis: {
