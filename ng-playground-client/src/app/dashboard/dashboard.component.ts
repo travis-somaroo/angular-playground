@@ -32,7 +32,7 @@ import { AreaWidgetComponent } from '../widgets/area-widget/area-widget.componen
           [deviation]="-2"
           [series]="{name: 'Active', data: [5,10,2,25,19]}"
           [peakSeries]="{name: 'Peak', data: [25,25,25,25,25]}"
-          [labels]="['PEAK', 'ACTIVE']"
+          [labels]="['ACTIVE','PEAK']"
         />
       </div>
     </div>

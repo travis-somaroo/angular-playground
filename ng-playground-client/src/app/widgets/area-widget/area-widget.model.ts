@@ -4,7 +4,8 @@ import {
   ApexFill,
   ApexGrid,
   ApexLegend,
-  ApexStroke, ApexTooltip,
+  ApexStroke,
+  ApexTooltip,
   ApexXAxis,
   ApexYAxis
 } from 'ng-apexcharts';

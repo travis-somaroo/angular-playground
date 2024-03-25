@@ -2,6 +2,7 @@ import { Component, computed, input } from "@angular/core";
 import { NgApexchartsModule } from "ng-apexcharts";
 import { AreaChartConfig, Series } from "./area-widget.model";
 import { NgClass, TitleCasePipe } from '@angular/common';
+import { WidgetLegendComponent } from '../../component/widget-legend/widget-legend.component';
 
 @Component({
   selector: "app-area-widget",
@@ -9,7 +10,8 @@ import { NgClass, TitleCasePipe } from '@angular/common';
   imports: [
     NgApexchartsModule,
     TitleCasePipe,
-    NgClass
+    NgClass,
+    WidgetLegendComponent
   ],
   template: `
     <div class="widget-wrapper">
@@ -19,26 +21,40 @@ import { NgClass, TitleCasePipe } from '@angular/common';
           <i class="pi pi-arrow-up-right widget-icon" (click)="navigationHandler()"></i>
         }
       </div>
-      <div class="">
-        <span class="total">{{ total() }}</span>
+      <div class="widget-content">
+        <div class="">
+          <span class="total">{{ total() }}</span>
+        </div>
+        <apx-chart
+          [series]="chartConfig().series"
+          [labels]="labels()"
+          [chart]="chartConfig().chart"
+          [stroke]="chartConfig().stroke"
+          [colors]="chartConfig().colors"
+          [dataLabels]="chartConfig().dataLabels"
+          [yaxis]="chartConfig().yaxis"
+          [xaxis]="chartConfig().xaxis"
+          [legend]="chartConfig().legend"
+          [fill]="chartConfig().fill"
+          [grid]="chartConfig().grid"
+          [tooltip]="chartConfig().tooltip"
+        ></apx-chart>
       </div>
-      <apx-chart
-        [series]="chartConfig().series"
-        [labels]="labels()"
-        [chart]="chartConfig().chart"
-        [stroke]="chartConfig().stroke"
-        [colors]="chartConfig().colors"
-        [dataLabels]="chartConfig().dataLabels"
-        [yaxis]="chartConfig().yaxis"
-        [xaxis]="chartConfig().xaxis"
-        [legend]="chartConfig().legend"
-        [fill]="chartConfig().fill"
-        [grid]="chartConfig().grid"
-        [tooltip]="chartConfig().tooltip"
-      ></apx-chart>
+      <div class="widget-footer">
+        @for (label of labels(); track label) {
+          <app-widget-legend [label]="label" [color]="'#03a8f2'"/>
+        }
+      </div>
     </div>
+
   `,
-  styles: ``
+  styles: `
+    .widget-footer {
+      height: 2rem;
+      display: flex;
+      gap: 1rem;
+    }
+  `
 })
 export class AreaWidgetComponent {
   id = input.required<number>();
@@ -68,7 +84,7 @@ export class AreaWidgetComponent {
       type: "line",
       height: 100,
       width: 300,
-      offsetY: 35,
+      offsetY: 5,
       offsetX: -24,
       stacked: false,
       zoom: {
