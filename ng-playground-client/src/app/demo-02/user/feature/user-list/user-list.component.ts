@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { UserService } from '../../service/user.service';
+import { UserListService } from '../../service/user-list.service';
 import { catchError, EMPTY } from 'rxjs';
 import { DropdownModule } from 'primeng/dropdown';
 import { AsyncPipe } from '@angular/common';
@@ -14,11 +14,11 @@ import { AsyncPipe } from '@angular/common';
   templateUrl: 'user-list.component.html'
 })
 export class UserListComponent {
-  private userService = inject(UserService);
+  private userService = inject(UserListService);
 
-  protected errorMessage: string;
+  errorMessage = '';
 
-  users$ = this.userService.users$.pipe(
+  usersWithTodos$ = this.userService.usersWithTodos1$.pipe(
     catchError(err => {
       this.errorMessage = err;
       return EMPTY;

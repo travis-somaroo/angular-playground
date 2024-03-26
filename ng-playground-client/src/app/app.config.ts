@@ -7,14 +7,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { CustomErrorHandler } from './demo-01/error/custom-error-handler.service';
 import { MessageService } from 'primeng/api';
-import { globalErrorHandlerInterceptor } from './demo-01/error/global-error-handler.interceptor';
+import { todoRequestInterceptor } from './demo-02/user/interceptor/user-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     MessageService,
     provideRouter(routes),
     //provideHttpClient(withInterceptors([globalErrorHandlerInterceptor])),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([todoRequestInterceptor])),
     importProvidersFrom([BrowserModule, BrowserAnimationsModule]),
     {
       // If this class is provided, use the custom one instead.
