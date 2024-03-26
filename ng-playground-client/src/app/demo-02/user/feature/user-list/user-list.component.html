@@ -1,18 +1,27 @@
-<div>
-  <h2>Reactive Error Handling</h2>
-  <h4>Select a user</h4>
-  <div class="grid">
-    <div class="col-6">
-      @if (users$ | async; as users) {
-        <p-dropdown
-          styleClass="w-5"
-          [options]="users"
-          optionLabel="firstName"
-        />
-      }</div>
-  </div>
+<div class="container my-5">
+  <h2>All Users with their ToDos</h2>
 
-  @if (errorMessage) {
-    <p class="text-red-500">{{ errorMessage }}</p>
-  }
+  <div class="card mb-2" *ngFor="let userData of usersWithTodos$ | async">
+    <div class="card-header">{{userData.user.name}}</div>
+    <div class="card-body">
+      <table class="table-responsive">
+        <thead>
+        <tr>
+          <th>Task Title</th>
+          <th>Completed?</th>
+        </tr>
+        </thead>
+        <tbody *ngFor="let todo of userData.todos">
+        <tr>
+          <td>{{ todo.title }}</td>
+          <td>{{ todo.completed }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card-footer alert alert-danger mb-0"
+         *ngIf="userData.message">{{userData.message}}
+    </div>
+  </div>
 </div>
