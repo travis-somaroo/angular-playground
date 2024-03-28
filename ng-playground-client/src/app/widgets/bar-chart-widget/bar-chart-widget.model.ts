@@ -1,27 +1,22 @@
 import {
   ApexAxisChartSeries,
   ApexChart,
-  ApexFill,
-  ApexGrid,
-  ApexLegend,
+  ApexPlotOptions,
   ApexStroke,
   ApexTooltip,
   ApexXAxis,
   ApexYAxis
 } from 'ng-apexcharts';
 
-
-export type AreaChartConfig = {
+export type BarChartConfig = {
   chart: ApexChart;
   series: ApexAxisChartSeries;
   labels: string[];
   stroke: ApexStroke;
-  legend: ApexLegend;
-  fill: ApexFill;
+  plotOptions: ApexPlotOptions;
   dataLabels: { enabled: boolean },
   xaxis: ApexXAxis;
   yaxis: ApexYAxis;
-  grid: ApexGrid;
   tooltip: ApexTooltip;
   colors: string[];
 }

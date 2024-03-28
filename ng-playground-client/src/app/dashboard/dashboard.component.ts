@@ -2,13 +2,15 @@ import { Component } from '@angular/core';
 import { DonutWidgetComponent } from '../widgets/donut-widget/donut-widget.component';
 import { ColorScheme, DisplayType } from '../widgets/donut-widget/donut-widget.model';
 import { AreaWidgetComponent } from '../widgets/area-widget/area-widget.component';
+import { BarChartWidgetComponent } from '../widgets/bar-chart-widget/bar-chart-widget.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
     DonutWidgetComponent,
-    AreaWidgetComponent
+    AreaWidgetComponent,
+    BarChartWidgetComponent
   ],
   template: `
     <div class="grid">
@@ -33,6 +35,17 @@ import { AreaWidgetComponent } from '../widgets/area-widget/area-widget.componen
           [series]="{name: 'Active', data: [5,10,2,25,19]}"
           [peakSeries]="{name: 'Peak', data: [25,25,25,25,25]}"
           [labels]="['ACTIVE','PEAK']"
+        />
+      </div>
+      <div class="col-3">
+        <app-bar-chart-widget
+          [id]="3"
+          [title]="'Visit Frequency'"
+          [total]="9.72"
+          [deviation]="+0.16"
+          [series]="{name: 'Weeks Average', data: [30]}"
+          [peakSeries]="{name: 'Peak', data: [35]}"
+          [labels]="['WEEKS AVERAGE','PEAK']"
         />
       </div>
     </div>

@@ -1,8 +1,9 @@
 import { Component, computed, input } from "@angular/core";
 import { NgApexchartsModule } from "ng-apexcharts";
-import { AreaChartConfig, Series } from "./area-widget.model";
+import { AreaChartConfig } from "./area-widget.model";
 import { NgClass, TitleCasePipe } from '@angular/common';
 import { WidgetLegendComponent } from '../../component/widget-legend/widget-legend.component';
+import { Series } from '../series.model';
 
 @Component({
   selector: "app-area-widget",
@@ -71,7 +72,6 @@ import { WidgetLegendComponent } from '../../component/widget-legend/widget-lege
 export class AreaWidgetComponent {
   id = input.required<number>();
   title = input.required<string>();
-
   total = input.required<number>();
   deviation = input.required<number>();
   series = input.required<Series>();
@@ -156,11 +156,12 @@ export class AreaWidgetComponent {
     }
   }));
 
+  navigationHandler() {
+
+  }
+
   private categories(data: number[], name: string): string[] {
     return data.map(() => name.toUpperCase());
   }
 
-  navigationHandler() {
-
-  }
 }
