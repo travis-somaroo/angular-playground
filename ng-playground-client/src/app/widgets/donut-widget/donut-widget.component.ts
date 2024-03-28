@@ -42,14 +42,11 @@ import { NgClass, TitleCasePipe } from '@angular/common';
 export class DonutWidgetComponent {
   id = input.required<number>();
   title = input.required<string>();
-
   series = input.required<number[]>();
   labels = input.required<string[]>();
   deviation = input<number>();
-
   displayFormat = input.required<DisplayType>();
   colorScheme = input.required<ColorScheme>();
-
 
   protected deviationChange = computed<string>(() => {
     return this.deviation() > 0 ? `+${this.deviation()}%` : `${this.deviation()}%`;

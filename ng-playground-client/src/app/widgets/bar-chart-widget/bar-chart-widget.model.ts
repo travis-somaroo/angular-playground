@@ -20,3 +20,8 @@ export type BarChartConfig = {
   tooltip: ApexTooltip;
   colors: string[];
 }
+
+export enum ColorScheme {
+  BLUE_MONO = 'blue-mono',
+  ORANGE_MONO = 'orange-mono'
+}

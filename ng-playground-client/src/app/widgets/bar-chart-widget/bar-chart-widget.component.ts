@@ -1,6 +1,6 @@
 import { Component, computed, input } from '@angular/core';
 import { Series } from '../series.model';
-import { BarChartConfig } from './bar-chart-widget.model';
+import { BarChartConfig, ColorScheme } from './bar-chart-widget.model';
 import { NgApexchartsModule } from 'ng-apexcharts';
 
 @Component({
@@ -29,7 +29,7 @@ export class BarChartWidgetComponent {
   deviation = input.required<number>();
   series = input.required<Series>();
   peakSeries = input.required<Series>();
-  labels = input.required<string[]>();
+  labels = input<string[]>();
 
   protected chartConfig = computed<Partial<BarChartConfig>>(() => ({
     series: [
@@ -59,7 +59,7 @@ export class BarChartWidgetComponent {
         horizontal: true,
         borderRadius: 3,
         borderRadiusApplication: 'end'
-      },
+      }
     },
     dataLabels: {
       enabled: false
@@ -67,27 +67,28 @@ export class BarChartWidgetComponent {
     stroke: {
       show: true,
       width: 2,
-      colors: ['#fff'],
+      colors: ['#fff']
     },
     xaxis: {
       categories: [''],
       labels: {
-        show: false,
+        show: false
       },
       axisTicks: {
-        show: false,
+        show: false
       },
       axisBorder: {
         show: true,
         color: '#d5d5d5',
         offsetX: -2,
-        offsetY: -1,
-      },
+        offsetY: -1
+      }
     },
-    yaxis: {},
+    yaxis: {}
   }));
 
   navigationHandler() {
-
+    // emit id
   }
+
 }
