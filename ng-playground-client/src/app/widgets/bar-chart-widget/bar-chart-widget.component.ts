@@ -1,24 +1,45 @@
 import { Component, computed, input } from '@angular/core';
 import { Series } from '../series.model';
-import { BarChartConfig, ColorScheme } from './bar-chart-widget.model';
+import { BarChartConfig } from './bar-chart-widget.model';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { NgClass, TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-bar-chart-widget',
   standalone: true,
   imports: [
-    NgApexchartsModule
+    NgApexchartsModule,
+    TitleCasePipe,
+    NgClass
   ],
   template: `
-    <apx-chart
-      [series]="chartConfig().series"
-      [chart]="chartConfig().chart"
-      [plotOptions]="chartConfig().plotOptions"
-      [dataLabels]="chartConfig().dataLabels"
-      [yaxis]="chartConfig().yaxis"
-      [xaxis]="chartConfig().xaxis"
-      [stroke]="chartConfig().stroke"
-    ></apx-chart>
+    <div class="widget-wrapper">
+      <div class="widget-header">
+        <h5 class="widget-title">{{ title() | titlecase }}</h5>
+        @if (id()) {
+          <i class="pi pi-arrow-up-right widget-icon" (click)="navigationHandler()"></i>
+        }
+      </div>
+      <div class="widget-content">
+        <div class="flex align-items-center gap-2">
+          <span class="total">{{ total() }}</span>
+          <span class="deviation-text flex flex-column">
+            <i class="pi"
+               [ngClass]="deviation() > 0 ? 'pi-arrow-circle-up increase' : 'pi-arrow-circle-down decrease'"></i>
+            <small>{{ deviation() }}</small>
+          </span>
+        </div>
+        <apx-chart
+          [series]="chartConfig().series"
+          [chart]="chartConfig().chart"
+          [plotOptions]="chartConfig().plotOptions"
+          [dataLabels]="chartConfig().dataLabels"
+          [yaxis]="chartConfig().yaxis"
+          [xaxis]="chartConfig().xaxis"
+          [stroke]="chartConfig().stroke"
+        ></apx-chart>
+      </div>
+    </div>
   `,
   styles: ``
 })
@@ -36,12 +57,12 @@ export class BarChartWidgetComponent {
       {
         name: this.peakSeries().name,
         data: this.peakSeries().data ?? [],
-        color: "#015479"
+        color: '#015479'
       },
       {
         name: this.series().name,
         data: this.series().data ?? [],
-        color: "#03a8f2"
+        color: '#03a8f2'
       }
     ],
     chart: {
@@ -66,8 +87,8 @@ export class BarChartWidgetComponent {
     },
     stroke: {
       show: true,
-      width: 2,
-      colors: ['#fff']
+      width: 1,
+      colors: ['#fff'],
     },
     xaxis: {
       categories: [''],
@@ -78,7 +99,7 @@ export class BarChartWidgetComponent {
         show: false
       },
       axisBorder: {
-        show: true,
+        show: false,
         color: '#d5d5d5',
         offsetX: -2,
         offsetY: -1

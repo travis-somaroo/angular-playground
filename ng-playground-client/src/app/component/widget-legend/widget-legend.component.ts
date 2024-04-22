@@ -1,23 +1,24 @@
 import { Component, input } from '@angular/core';
-import { NgClass, NgStyle } from '@angular/common';
+import { NgClass, NgIf, NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-widget-legend',
   standalone: true,
   imports: [
     NgClass,
-    NgStyle
+    NgStyle,
+    NgIf
   ],
   template: `
-    <div class="flex gap-1 align-items-center justify-content-center">
-      <!--  TODO: Use a const -->
-      @if (label() !== 'PEAK') {
-        <div class="marker" [ngStyle]="{'background-color': color()}"></div>
-      } @else {
-        <i class="pi pi-ellipsis-h"></i>
-      }
-      <p>{{ label() }}</p>
-    </div>
+<!--    <div class="flex gap-1 align-items-center justify-content-center">-->
+<!--      &lt;!&ndash;  TODO: Use a const &ndash;&gt;-->
+<!--      @if (label() !== 'PEAK') {-->
+<!--        <div class="marker" [ngStyle]="{'background-color': color()}"></div>-->
+<!--      } @else {-->
+<!--        <i class="pi pi-ellipsis-h"></i>-->
+<!--      }-->
+<!--      <p>{{ label() }}</p>-->
+<!--    </div>-->
   `,
   styles: `
     .marker {
