@@ -8,7 +8,6 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { AddressFormComponent } from '../address-form/address-form.component';
 import { CheckboxModule } from 'primeng/checkbox';
 import { PurchaseFormModel } from '../../model/purchase-form.model';
-import { purchaseFormValidations } from '../../validations/purchase-form.validations';
 
 
 @Component({
@@ -54,7 +53,6 @@ export class MyFormComponent {
   }
 
   setFormValue(event: PurchaseFormModel) {
-    console.log('event', event);
     this.formValue.set(event);
     if (event.addresses?.shippingAddress) {
       this.shippingAddress.set(event.addresses?.shippingAddress);
