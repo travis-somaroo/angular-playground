@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { EnvelopeComponent } from '../envelope/envelope.component';
 import { DropdownChangeEvent, DropdownModule } from 'primeng/dropdown';
 import { DepositRepositoryService } from '../deposit-repository.service';
@@ -63,10 +63,15 @@ export class AddDepositComponent {
   selectedDeposit = signal<JsonFormSchema>(undefined!);
   schema = computed(() => this.selectedDeposit());
   envelopeSchema = computed(() => this.schema().innerBagRule);
-  newEnvelopeSchema = computed(() => this.envelopeSchema())
+  newEnvelopeSchema = computed(() => this.envelopeSchema());
 
   protected repository = inject(DepositRepositoryService);
   protected depositTypeCtrl = new FormControl();
+
+  envelopesEff = effect(() => {
+    console.log(this.envelopes());
+    this.envelopes().map(env => console.log(env.isValid()));
+  });
 
   depositTypeHandler(event: DropdownChangeEvent) {
     const deposit = event.value;
