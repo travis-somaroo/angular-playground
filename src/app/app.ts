@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { NgClass, UpperCasePipe } from '@angular/common';
 import { mapStatusToColor } from './status-mapper-util';
 import { StatusColorPipe } from './status-color-pipe';
@@ -18,7 +18,7 @@ interface Customer {
     StatusColorPipe
   ],
   templateUrl: './app.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class App implements OnInit {
   readonly #cdr = inject(ChangeDetectorRef);
