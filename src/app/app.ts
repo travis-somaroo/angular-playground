@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { NgClass, UpperCasePipe } from '@angular/common';
+import { mapStatusToColor } from './status-mapper-util';
+import { StatusColorPipe } from './status-color-pipe';
 
 interface Customer {
   firstName: string;
@@ -8,23 +10,14 @@ interface Customer {
   status: 'active' | 'inactive';
 }
 
-function mapStatusToColor(status: 'active' | 'inactive'): string {
-  console.warn('mapStatusToColor() running', status);
-  const colors: Record<string, string> = {
-    active: 'bg-green-100 text-green-500',
-    inactive: 'bg-red-100 text-red-500',
-  };
-  return colors[status];
-}
-
 @Component({
   selector: 'app-root',
   imports: [
     NgClass,
-    UpperCasePipe
+    UpperCasePipe,
+    StatusColorPipe
   ],
   templateUrl: './app.html',
-  styleUrl: './app.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class App implements OnInit {
@@ -62,7 +55,12 @@ export class App implements OnInit {
     }
   }
 
+  protected updateCustomer(): void {
+    this.data.update(d => ({ ...d, firstName: 'Travis', lastName: 'Somaroo', emailAddress: 'travis@mail.com' }));
+  }
+
   protected detectChanges(): void {
     this.#cdr.detectChanges(); // runs change detection immediately for the component and its children.
   }
+
 }
