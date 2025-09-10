@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { NgClass, UpperCasePipe } from '@angular/common';
 
 interface Customer {
@@ -9,7 +9,7 @@ interface Customer {
 }
 
 function mapStatusToColor(status: 'active' | 'inactive'): string {
-  console.log('mapStatusToColor() running', status);
+  console.warn('mapStatusToColor() running', status);
   const colors: Record<string, string> = {
     active: 'bg-green-100 text-green-500',
     inactive: 'bg-red-100 text-red-500',
@@ -24,9 +24,13 @@ function mapStatusToColor(status: 'active' | 'inactive'): string {
     UpperCasePipe
   ],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrl: './app.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class App {
+export class App implements OnInit {
+  readonly #cdr = inject(ChangeDetectorRef);
+
+  protected count = 0;
   protected readonly data = signal<Customer>({
     firstName: 'John',
     lastName: 'Doe',
@@ -34,8 +38,16 @@ export class App {
     status: 'active',
   });
 
-  // runs only when `this.data()` changes
+  // runs only when `this.data()` changes, change detection won't run if there are no changes
   protected readonly status = computed(() => mapStatusToColor(this.data().status));
+
+
+  public ngOnInit(): void {
+    // setInterval(() => {
+    //   this.count++; // won't update UI
+    //   this.#cdr.markForCheck(); // will update UI - schedules the component to be checked in the next Angular CD cycle
+    // }, 1000); // change detection will need to run manually
+  }
 
   // get called everytime change detection runs - done by angular
   protected getStatus(status: 'active' | 'inactive'): string {
@@ -50,4 +62,7 @@ export class App {
     }
   }
 
+  protected detectChanges(): void {
+    this.#cdr.detectChanges(); // runs change detection immediately for the component and its children.
+  }
 }

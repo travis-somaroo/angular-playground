@@ -1,7 +1,7 @@
 @let customer = data();
 @let customerStatus = customer.status;
 <div class="mx-auto px-4 py-6">
-  <h1 class="text-3xl font-bold">Change Detection</h1>
+  <h1 class="text-3xl font-bold">Change Detection ({{ count }})</h1>
   <div class="grid grid-cols-2 items-center gap-6">
     <div>
       <p class="font-medium">First Name</p>
@@ -17,10 +17,15 @@
     </div>
     <div>
       <span class="rounded font-medium p-1"
-            [ngClass]="getStatus(customerStatus)">{{ customerStatus | uppercase }}</span>
+            [ngClass]="status()">{{ customerStatus | uppercase }}</span>
     </div>
 
-    <div class="col-span-2 flex justify-end">
+    <div class="col-span-2 flex justify-end gap-3">
+      <button
+        class="px-4 py-2 rounded-lg text-white font-medium shadow-md transition-colors bg-blue-400"
+        (click)="detectChanges()">
+        Run Change Detection
+      </button>
       <button
         class="px-4 py-2 rounded-lg text-white font-medium shadow-md transition-colors"
         [class.bg-red-400]="customerStatus === 'active'"
