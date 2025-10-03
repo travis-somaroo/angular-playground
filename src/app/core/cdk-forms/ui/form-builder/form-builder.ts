@@ -33,19 +33,18 @@ export class FormBuilder {
     { type: 'date', icon: 'calendar_today', label: 'Date Picker', defaultLabel: 'Date' }
   ]);
 
-  readonly formElements = signal<FormElement[]>([]);
-  readonly selectedElementId = signal<string | null>(null);
+  protected readonly formElements = signal<FormElement[]>([]);
+  protected readonly selectedElementId = signal<string | null>(null);
 
-  // Computed signals
-  readonly selectedElement = computed(() => {
+  protected readonly selectedElement = computed(() => {
     const elementId = this.selectedElementId();
     return elementId ? this.formElements().find((el: { id: string; }) => el.id === elementId) || null : null;
   });
 
-  readonly hasElements = computed(() => this.formElements().length > 0);
-  readonly formJson = computed(() => JSON.stringify(this.formElements(), null, 2));
+  protected readonly hasElements = computed(() => this.formElements().length > 0);
+  protected readonly formJson = computed(() => JSON.stringify(this.formElements(), null, 2));
 
-  drop(event: CdkDragDrop<FormElementTemplate[] | FormElement[]>) {
+  protected drop(event: CdkDragDrop<FormElementTemplate[] | FormElement[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(this.formElements(), event.previousIndex, event.currentIndex);
       this.formElements.update((elements: any) => [...elements]);
@@ -83,11 +82,11 @@ export class FormBuilder {
     }
   }
 
-  selectElement(element: FormElement) {
+  protected selectElement(element: FormElement) {
     this.selectedElementId.set(element.id);
   }
 
-  deleteElement(elementId: string) {
+  protected deleteElement(elementId: string) {
     this.formElements.update((elements: any[]) => elements.filter(el => el.id !== elementId));
 
     if (this.selectedElementId() === elementId) {
@@ -95,10 +94,9 @@ export class FormBuilder {
     }
   }
 
-  updateElementOption(elementId: string, optionIndex: number, newValue: string) {
+  protected updateElementOption(elementId: string, optionIndex: number, newValue: string) {
     const element = this.formElements().find((el: { id: string; }) => el.id === elementId);
 
-    // Type guard to ensure we're working with elements that have options
     if (element && (element.type === 'select' || element.type === 'radio')) {
       if (element.options) {
         const newOptions = [...element.options];
@@ -108,7 +106,7 @@ export class FormBuilder {
     }
   }
 
-  updateElement<T extends keyof FormElement>(elementId: string, key: T, value: FormElement[T]) {
+  protected updateElement<T extends keyof FormElement>(elementId: string, key: T, value: FormElement[T]) {
     // @ts-ignore
     this.formElements.update((elements: any[]) =>
       elements.map((el: { id: string; }) =>
@@ -117,7 +115,7 @@ export class FormBuilder {
     );
   }
 
-  addOption(elementId: string) {
+  protected addOption(elementId: string) {
     const element = this.formElements().find((el: { id: string; }) => el.id === elementId);
     if (element?.options) {
       const newOption = `Option ${element.options.length + 1}`;
@@ -125,7 +123,7 @@ export class FormBuilder {
     }
   }
 
-  removeOption(elementId: string, optionIndex: number) {
+  protected removeOption(elementId: string, optionIndex: number) {
     const element = this.formElements().find((el: { id: string; }) => el.id === elementId);
     if (element?.options && element.options.length > 1) {
       const updatedOptions = element.options.filter((_: any, index: number) => index !== optionIndex);
@@ -133,21 +131,13 @@ export class FormBuilder {
     }
   }
 
-  previewForm() {
+  protected previewForm() {
     console.log('Form Data:', this.formElements());
-    alert('Check browser console for form data');
   }
 
-  clearForm() {
+  protected clearForm() {
     this.formElements.set([]);
     this.selectedElementId.set(null);
   }
 
-  trackByElementId(index: number, element: FormElement): string {
-    return element.id;
-  }
-
-  trackByIndex(index: number): number {
-    return index;
-  }
 }
