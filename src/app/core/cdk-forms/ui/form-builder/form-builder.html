@@ -1,0 +1,255 @@
+<div class="min-h-screen bg-gray-50 p-6">
+  <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900">Drag & Drop Form Builder</h1>
+        <p class="text-gray-600 mt-2">Build forms effortlessly with drag and drop</p>
+      </div>
+      <div class="flex gap-3">
+        <button
+          (click)="previewForm()"
+          class="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors font-medium">
+          Preview Form
+        </button>
+        <button
+          (click)="clearForm()"
+          [disabled]="!hasElements()"
+          class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium">
+          Clear Form
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex gap-6 h-[calc(100vh-200px)]">
+    <div class="w-80 bg-white rounded-xl shadow-sm p-6">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">Form Elements</h3>
+      <div
+        cdkDropList
+        #availableList="cdkDropList"
+        [cdkDropListData]="availableElements()"
+        [cdkDropListConnectedTo]="[formList]"
+        class="space-y-3"
+      >
+
+        @for (element of availableElements(); track element.type) {
+          <div
+            class="flex items-center gap-3 p-4 border-2 border-dashed border-gray-200 rounded-lg cursor-grab hover:border-primary-300 hover:bg-primary-50 transition-colors group"
+            cdkDrag
+            [cdkDragData]="element">
+
+            <span class="material-icons text-gray-600 group-hover:text-primary-500 text-lg">
+              {{ element.icon }}
+            </span>
+            <span class="text-gray-700 font-medium group-hover:text-primary-600">
+              {{ element.label }}
+            </span>
+
+            <div *cdkDragPlaceholder class="opacity-50">
+              <div
+                class="flex items-center gap-3 p-4 border-2 border-dashed border-primary-300 bg-primary-50 rounded-lg">
+                <span class="material-icons text-primary-500 text-lg">{{ element.icon }}</span>
+                <span class="text-primary-600 font-medium">{{ element.label }}</span>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="flex-1 bg-white rounded-xl shadow-sm p-6">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">Form Canvas</h3>
+
+      <div
+        cdkDropList
+        #formList="cdkDropList"
+        [cdkDropListData]="formElements()"
+        [cdkDropListConnectedTo]="[availableList]"
+        (cdkDropListDropped)="drop($any($event))"
+        class="min-h-[500px] border-2 border-dashed border-gray-200 rounded-lg p-6 transition-colors hover:border-gray-300">
+
+        @if (hasElements()) {
+          <div class="space-y-4">
+            @for (element of formElements(); track element; ) {
+              <div
+                class="bg-gray-50 rounded-lg border-2 transition-all cursor-pointer"
+                [class.border-primary-500]="selectedElementId() === element.id"
+                [class.border-transparent]="selectedElementId() !== element.id"
+                [class.ring-2]="selectedElementId() === element.id"
+                [class.ring-primary-200]="selectedElementId() === element.id"
+                (click)="selectElement(element)"
+                cdkDrag>
+
+                <div class="flex items-center gap-2 p-3 bg-white border-b border-gray-200 rounded-t-lg">
+                  <span
+                    class="material-icons text-gray-400 cursor-grab hover:text-gray-600"
+                    cdkDragHandle>
+                    drag_indicator
+                  </span>
+                  <span class="text-sm font-medium text-gray-500 uppercase tracking-wide flex-1">
+                    {{ element.type }}
+                  </span>
+                  <button
+                    (click)="deleteElement(element.id); $event.stopPropagation()"
+                    class="p-1 text-red-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors">
+                    <span class="material-icons text-lg">delete</span>
+                  </button>
+                </div>
+
+                <div class="p-4">
+                  <label class="block text-sm font-medium text-gray-700 mb-2">
+                    {{ element.label }}
+                    @if (element.required) {
+                      <span class="text-red-500 ml-1">*</span>
+                    }
+                  </label>
+
+                  @switch (element.type) {
+                    @case ('text') {
+                      <input
+                        type="text"
+                        [placeholder]="element.placeholder || ''"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white">
+                    }
+                    @case ('email') {
+                      <input
+                        type="email"
+                        [placeholder]="element.placeholder || ''"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white">
+                    }
+                    @case ('number') {
+                      <input
+                        type="number"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white">
+                    }
+                    @case ('textarea') {
+                      <textarea
+                        [placeholder]="element.placeholder || ''"
+                        rows="3"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white resize-none">
+                      </textarea>
+                    }
+                    @case ('select') {
+                      <select
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white">
+                        @for (option of element.options; track trackByIndex($index)) {
+                          <option>{{ option }}</option>
+                        }
+                      </select>
+                    }
+                    @case ('checkbox') {
+                      <div class="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          class="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500">
+                        <span class="text-gray-700">{{ element.label }}</span>
+                      </div>
+                    }
+                    @case ('radio') {
+                      <div class="space-y-2">
+                        @for (option of element.options; track trackByIndex($index)) {
+                          <div class="flex items-center gap-2">
+                            <input
+                              type="radio"
+                              [name]="element.id"
+                              class="w-4 h-4 text-primary-600 border-gray-300 focus:ring-primary-500">
+                            <span class="text-gray-700">{{ option }}</span>
+                          </div>
+                        }
+                      </div>
+                    }
+                    @case ('date') {
+                      <input
+                        type="date"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white">
+                    }
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="flex flex-col items-center justify-center h-full text-gray-400 py-12">
+            <span class="material-icons text-6xl mb-4">add_circle</span>
+            <p class="text-lg font-medium">Drag form elements here to start building</p>
+            <p class="text-sm mt-2">Choose from the sidebar and drop them here</p>
+          </div>
+        }
+      </div>
+    </div>
+
+    @if (selectedElement(); as element) {
+      <div class="w-96 bg-white rounded-xl shadow-sm p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Element Properties</h3>
+
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Label</label>
+            <input
+              type="text"
+              [value]="element.label"
+              (input)="updateElement(element.id, 'label', $any($event.target).value)"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+          </div>
+
+          @if (element.type !== 'checkbox' && element.type !== 'radio') {
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Placeholder</label>
+              <input
+                type="text"
+                [value]="element.placeholder || ''"
+                (input)="updateElement(element.id, 'placeholder', $any($event.target).value)"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+            </div>
+          }
+
+          <div class="flex items-center gap-2">
+            <input
+              type="checkbox"
+              [checked]="element.required"
+              (change)="updateElement(element.id, 'required', $any($event.target).checked)"
+              class="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500">
+            <label class="text-sm font-medium text-gray-700">Required Field</label>
+          </div>
+
+          @if (element.options) {
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Options</label>
+              <div class="space-y-2">
+                @for (option of element.options; track $index; let i = $index) {
+                  <div class="flex gap-2">
+                    <input
+                      type="text"
+                      [value]="option"
+                      (input)="updateElementOption(element.id, i, $any($event.target).value)"
+                      class="flex-1 px-3 py-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm">
+                    <button
+                      type="button"
+                      (click)="removeOption(element.id, i)"
+                      [disabled]="element.options!.length <= 1"
+                      class="px-2 text-red-400 hover:text-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                      <span class="material-icons text-lg">remove</span>
+                    </button>
+                  </div>
+                }
+              </div>
+              <button
+                type="button"
+                (click)="addOption(element.id)"
+                class="mt-2 flex items-center gap-1 px-3 py-1 text-sm text-primary-600 hover:text-primary-700 font-medium">
+                <span class="material-icons text-lg">add</span>
+                Add Option
+              </button>
+            </div>
+          }
+
+          <div class="pt-4 border-t border-gray-200">
+            <h4 class="text-sm font-medium text-gray-700 mb-2">Element Data</h4>
+            <pre
+              class="text-xs bg-gray-50 p-3 rounded-md border border-gray-200 overflow-auto max-h-40">{{ element | json }}</pre>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>
