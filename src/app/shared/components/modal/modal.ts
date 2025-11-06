@@ -27,7 +27,7 @@ export class Modal implements AfterViewInit, OnDestroy {
   public readonly willDismiss = output<{ data: any; role: string }>();
   public readonly didDismiss = output<{ data: any; role: string }>();
 
-  public readonly modalContent = viewChild.required<ViewContainerRef>('modalContent');
+  public readonly modalContent = viewChild.required('modalContent', { read: ViewContainerRef });
 
   readonly #envInjector = inject(EnvironmentInjector);
 
@@ -38,17 +38,18 @@ export class Modal implements AfterViewInit, OnDestroy {
     this.#isPresented() ? 'opacity-100' : 'opacity-0'
   );
 
-  #dismissResolve?: (value: { data: any; role: string }) => void;
-  #willDismissResolve?: (value: { data: any; role: string }) => void;
+  protected dismissResolve?: (value: { data: any; role: string }) => void;
+  protected willDismissResolve?: (value: { data: any; role: string }) => void;
 
   readonly #dismissPromise = new Promise<{ data: any; role: string }>((resolve) => {
-    this.#dismissResolve = resolve;
+    this.dismissResolve = resolve;
   });
   readonly #willDismissPromise = new Promise<{ data: any; role: string }>((resolve) => {
-    this.#willDismissResolve = resolve;
+    this.willDismissResolve = resolve;
   });
 
   readonly #loadComponent = (): void => {
+    console.log('running');
     const component = this.component();
     const vcr = this.modalContent();
 
@@ -78,12 +79,12 @@ export class Modal implements AfterViewInit, OnDestroy {
     this.#isPresented.set(false);
 
     this.willDismiss.emit({ data, role });
-    this.#willDismissResolve?.({ data, role });
+    this.willDismissResolve?.({ data, role });
 
     await new Promise(resolve => setTimeout(resolve, 300));
 
     this.didDismiss.emit({ data, role });
-    this.#dismissResolve?.({ data, role });
+    this.dismissResolve?.({ data, role });
   }
 
   public onBackdropClick(event: MouseEvent): void {
