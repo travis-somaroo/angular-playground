@@ -1,10 +1,9 @@
 import { Routes } from '@angular/router';
-import { CreateTransaction } from './features/transaction/create-transaction/create-transaction';
+import { Customers } from './customers/customers';
 
 export const routes: Routes = [
   {
     path: '',
-    component: CreateTransaction
+    component: Customers
   }
-
 ];
