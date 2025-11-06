@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ModalService } from '../core/modal/modal-service';
+import { CustomersModal } from './customers-modal';
 
 @Component({
   selector: 'app-customers',
@@ -18,6 +19,9 @@ export class Customers {
   readonly #service = inject(ModalService);
 
   protected onOpen(): void {
-    this.#service.create();
+    this.#service.create({
+      title: 'Customers Modal',
+      component: CustomersModal
+    });
   }
 }
