@@ -15,29 +15,17 @@ import {
 @Component({
   selector: 'app-modal',
   template: `
-    <div class="modal-overlay">
-      <div class="modal-fullscreen">
+    <div
+      class="fixed inset-0 z-[1000] flex items-end justify-center bg-black/50 backdrop-blur-sm animate-fade-in"
+    >
+      <div
+        class="w-full sm:max-w-md rounded-t-2xl bg-white shadow-lg animate-slide-up overflow-hidden"
+      >
         <ng-container #content></ng-container>
       </div>
     </div>
   `,
-  styles: [`
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 1000;
-    }
-
-    .modal-fullscreen {
-      width: 100%;
-      height: 100%;
-      background: white;
-    }
-  `]
+  styleUrl: './modal.scss'
 })
 export class Modal implements AfterViewInit, OnDestroy {
   public readonly title = input<string>('');
