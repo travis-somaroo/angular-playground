@@ -2,7 +2,6 @@ import {
   ApplicationRef,
   ComponentRef,
   createComponent,
-  effect,
   EnvironmentInjector,
   inject,
   Injectable,
@@ -14,6 +13,7 @@ import { Modal } from './components/modal';
 export interface ModalConfig {
   title: string;
   component: Type<unknown>;
+  componentProps?: Record<string, unknown>;
 }
 
 @Injectable({
@@ -25,12 +25,6 @@ export class ModalService {
 
   readonly #componentRef = signal<ComponentRef<Modal> | null>(null);
 
-  constructor() {
-    effect(() => {
-      console.log(this.#componentRef());
-    });
-  }
-
   public create(options: ModalConfig): void {
     if (!this.#componentRef()) {
       const compRef = createComponent(Modal, {
@@ -39,6 +33,7 @@ export class ModalService {
 
       compRef.setInput('title', options.title);
       compRef.setInput('component', options.component);
+      compRef.setInput('componentProps', options.componentProps || {});
 
       this.#appRef.attachView(compRef.hostView);
       document.body.appendChild(compRef.location.nativeElement);

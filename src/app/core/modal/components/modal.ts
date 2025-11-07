@@ -30,6 +30,7 @@ import {
 export class Modal implements AfterViewInit, OnDestroy {
   public readonly title = input<string>('');
   public readonly component = input.required<Type<unknown>>();
+  public readonly componentProps = input<Record<string, unknown>>({});
   public readonly modalContent = viewChild.required('content', { read: ViewContainerRef });
 
   readonly #injector = inject(Injector);
@@ -46,17 +47,24 @@ export class Modal implements AfterViewInit, OnDestroy {
 
   protected loadComponent(): void {
     const component = this.component();
+    const componentProps = this.componentProps();
     const viewContainerRef = this.modalContent();
 
     if (component && viewContainerRef) {
       viewContainerRef.clear();
-      this.#componentRef.set(viewContainerRef.createComponent(component, {
+
+      const componentRef = viewContainerRef.createComponent(component, {
         injector: this.#injector
-      }));
-      const componentRef = this.#componentRef();
-      if (componentRef) {
-        componentRef.changeDetectorRef.detectChanges();
+      });
+
+      if (componentProps) {
+        Object.keys(componentProps).forEach(key => {
+          componentRef.setInput(key, componentProps[key]);
+        });
       }
+
+      this.#componentRef.set(componentRef);
+      componentRef.changeDetectorRef.detectChanges();
     }
   }
 

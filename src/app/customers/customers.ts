@@ -21,7 +21,12 @@ export class Customers {
   protected onOpen(): void {
     this.#service.create({
       title: 'Customers Modal',
-      component: CustomersModal
+      component: CustomersModal,
+      componentProps: {
+        customerId: 123,
+        customerName: 'John Doe',
+        isEditMode: true
+      }
     });
   }
 }
