@@ -42,7 +42,7 @@ export class Modal implements AfterViewInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.destroyComponent();
+    this.#destroyComponent();
   }
 
   protected loadComponent(): void {
@@ -68,12 +68,12 @@ export class Modal implements AfterViewInit, OnDestroy {
     }
   }
 
-  protected destroyComponent(): void {
+  readonly #destroyComponent = (): void => {
     const componentRef = this.#componentRef();
     const viewContainerRef = this.modalContent();
     if (componentRef) {
       viewContainerRef.clear();
       this.#componentRef.set(null);
     }
-  }
+  };
 }
