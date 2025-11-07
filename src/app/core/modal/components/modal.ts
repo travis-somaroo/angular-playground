@@ -16,10 +16,10 @@ import {
   selector: 'app-modal',
   template: `
     <div
-      class="fixed inset-0 z-[1000] flex items-end justify-center bg-black/50 backdrop-blur-sm animate-fade-in"
+      class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/50 backdrop-blur-sm animate-fade-in"
     >
       <div
-        class="w-full sm:max-w-md rounded-t-2xl bg-white shadow-lg animate-slide-up overflow-hidden"
+        class="w-full h-full bg-white shadow-xl animate-scale-up rounded-none sm:rounded-xl overflow-hidden"
       >
         <ng-container #content></ng-container>
       </div>
@@ -46,11 +46,11 @@ export class Modal implements AfterViewInit, OnDestroy {
 
   protected loadComponent(): void {
     const component = this.component();
-    const container = this.modalContent();
+    const viewContainerRef = this.modalContent();
 
-    if (component && container) {
-      container.clear();
-      this.#componentRef.set(container.createComponent(component, {
+    if (component && viewContainerRef) {
+      viewContainerRef.clear();
+      this.#componentRef.set(viewContainerRef.createComponent(component, {
         injector: this.#injector
       }));
       const componentRef = this.#componentRef();
@@ -62,8 +62,9 @@ export class Modal implements AfterViewInit, OnDestroy {
 
   protected destroyComponent(): void {
     const componentRef = this.#componentRef();
+    const viewContainerRef = this.modalContent();
     if (componentRef) {
-      componentRef.destroy();
+      viewContainerRef.clear();
       this.#componentRef.set(null);
     }
   }
