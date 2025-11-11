@@ -26,6 +26,12 @@ export class Customers {
         customerId: 123,
         customerName: 'John Doe',
         isEditMode: true
+      },
+      onConfirm: (data) => {
+        console.log('Modal confirmed with data:', data);
+      },
+      onCancel: () => {
+        console.log('Modal cancelled');
       }
     });
   }
